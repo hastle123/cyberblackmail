@@ -26,7 +26,7 @@ export function MastheadLock({ className = "" }: { className?: string }) {
   );
 }
 
-/** Masthead — blackletter text + padlock; Cyber gray, Blackmail light */
+/** Masthead — blackletter text + padlock; Cyber gray, B black, lackmail light */
 export function Wordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
   const t = useTranslations("brand");
 
