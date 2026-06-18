@@ -3,10 +3,16 @@ import { defineRouting } from "next-intl/routing";
 /** Flip to `true` to restore /ru, Russian UI, and /ru/forum */
 export const RU_LOCALE_ENABLED = false;
 
+export type Locale = "en" | "ru";
+
+const locales: Locale[] = RU_LOCALE_ENABLED ? ["en", "ru"] : ["en"];
+
 export const routing = defineRouting({
-  locales: RU_LOCALE_ENABLED ? (["en", "ru"] as const) : (["en"] as const),
+  locales,
   defaultLocale: "en",
   localePrefix: "as-needed",
 });
 
-export type Locale = (typeof routing.locales)[number];
+export function isSupportedLocale(locale: string): locale is Locale {
+  return locales.includes(locale as Locale);
+}

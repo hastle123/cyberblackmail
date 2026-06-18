@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiveTicker } from "@/components/layout/LiveTicker";
-import { routing, type Locale } from "@/i18n/routing";
+import { routing, isSupportedLocale } from "@/i18n/routing";
 
 const sans = IBM_Plex_Sans({
   subsets: ["latin", "cyrillic"],
@@ -61,7 +61,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  if (!routing.locales.includes(locale as Locale)) {
+  if (!isSupportedLocale(locale)) {
     notFound();
   }
 
