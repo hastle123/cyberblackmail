@@ -1,0 +1,466 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Severity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum IOCType {
+  IP
+  DOMAIN
+  URL
+  HASH
+  EMAIL
+}
+
+enum TimelineStage {
+  INITIAL_ACCESS
+  RECONNAISSANCE
+  PRIVILEGE_ESCALATION
+  LATERAL_MOVEMENT
+  DATA_EXFILTRATION
+  RANSOM_DEMAND
+  RESOLUTION
+}
+
+enum Category {
+  BREAKING_BREACH
+  RANSOMWARE
+  DARKNET
+  THREAT_INTEL
+  ZERO_DAY
+  DATA_LEAK
+  APT
+  CYBER_DEFENSE
+}
+
+enum ActorType {
+  APT
+  RANSOMWARE
+  CYBERCRIME
+  HACKTIVIST
+}
+
+enum GroupStatus {
+  ACTIVE
+  DISRUPTED
+  INACTIVE
+}
+
+enum ExploitStatus {
+  ACTIVE
+  POC
+  THEORETICAL
+  PATCHED
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+model Article {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  excerpt           String
+  content           String
+  titleRu           String?
+  excerptRu         String?
+  contentRu         String?
+  coverImage        String?
+  severity          Severity
+  category          Category
+  intelligenceScore Int      @default(0)
+  source            String
+  sourceUrl         String?  @unique
+  readTime          Int      @default(5)
+  publishedAt       DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  threatAnalysis ThreatAnalysis?
+  timeline       ThreatTimelineEvent[]
+  iocs           IOCOnArticle[]
+  actors         ThreatActorOnArticle[]
+  companies      CompanyOnArticle[]
+  cves           CVEOnArticle[]
+  incident       Incident?
+  breach         Breach?
+  alerts         Alert[]
+}
+
+model ThreatAnalysis {
+  id                 String  @id @default(cuid())
+  articleId          String  @unique
+  executiveSummary   String
+  attackVector       String
+  impact             String
+  targetIndustry     String
+  executiveSummaryRu String?
+  attackVectorRu     String?
+  impactRu           String?
+  targetIndustryRu   String?
+  iocIndicators      Json
+  mitigations        Json
+  article            Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+}
+
+model ThreatTimelineEvent {
+  id          String         @id @default(cuid())
+  stage       TimelineStage
+  timestamp   DateTime
+  title       String
+  description String
+  order       Int
+  articleId   String?
+  incidentId  String?
+  campaignId  String?
+  article     Article?       @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  incident    Incident?      @relation(fields: [incidentId], references: [id], onDelete: SetNull)
+  campaign    Campaign?      @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([articleId])
+  @@index([incidentId])
+}
+
+model IOC {
+  id                String   @id @default(cuid())
+  type              IOCType
+  value             String
+  threatLevel       Severity
+  intelligenceScore Int      @default(0)
+  firstSeen         DateTime
+  lastSeen          DateTime
+  createdAt         DateTime @default(now())
+
+  articles  IOCOnArticle[]
+  incidents IOCOnIncident[]
+
+  @@unique([type, value])
+  @@index([value])
+}
+
+model IOCOnArticle {
+  iocId     String
+  articleId String
+  ioc       IOC     @relation(fields: [iocId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([iocId, articleId])
+}
+
+model IOCOnIncident {
+  iocId      String
+  incidentId String
+  ioc        IOC      @relation(fields: [iocId], references: [id], onDelete: Cascade)
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@id([iocId, incidentId])
+}
+
+model Company {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  industry          String
+  headquarters      String?
+  logoUrl           String?
+  intelligenceScore Int      @default(0)
+  createdAt         DateTime @default(now())
+
+  articles  CompanyOnArticle[]
+  breaches  Breach[]
+  incidents Incident[]
+}
+
+model CompanyOnArticle {
+  companyId String
+  articleId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([companyId, articleId])
+}
+
+model Country {
+  id                String   @id @default(cuid())
+  code              String   @unique
+  name              String
+  region            String?
+  intelligenceScore Int      @default(0)
+
+  incidents Incident[]
+  actors    ThreatActorOnCountry[]
+}
+
+model ThreatActorOnCountry {
+  actorId   String
+  countryId String
+  actor     ThreatActor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  country   Country     @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, countryId])
+}
+
+model Industry {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  description       String?
+  intelligenceScore Int      @default(0)
+
+  breaches  Breach[]
+  incidents Incident[]
+  campaigns Campaign[]
+}
+
+model ThreatActor {
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  name              String
+  aliases           Json
+  type              ActorType
+  origin            String?
+  motivation        String?
+  description       String
+  ttps              Json
+  targetSectors     Json
+  intelligenceScore Int       @default(0)
+  threatLevel       Severity  @default(HIGH)
+  createdAt         DateTime  @default(now())
+
+  articles   ThreatActorOnArticle[]
+  campaigns  Campaign[]
+  countries  ThreatActorOnCountry[]
+  cves       CVEOnActor[]
+  ransomware RansomwareGroup?
+}
+
+model ThreatActorOnArticle {
+  actorId   String
+  articleId String
+  actor     ThreatActor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  article   Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, articleId])
+}
+
+model Campaign {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  actorId     String
+  industryId  String?
+  actor       ThreatActor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  industry    Industry?   @relation(fields: [industryId], references: [id], onDelete: SetNull)
+  timeline    ThreatTimelineEvent[]
+}
+
+model RansomwareGroup {
+  id                String      @id @default(cuid())
+  slug              String      @unique
+  name              String
+  status            GroupStatus
+  victimCount       Int         @default(0)
+  lastSeen          DateTime
+  description       String
+  industries        Json
+  countries         Json
+  intelligenceScore Int         @default(0)
+  actorId           String?     @unique
+  actor             ThreatActor? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+}
+
+model Breach {
+  id                String   @id @default(cuid())
+  organization      String
+  recordsExposed    String
+  dataTypes         Json
+  industry          String?
+  breachDate        DateTime
+  severity          Severity
+  intelligenceScore Int      @default(0)
+  articleId         String?  @unique
+  companyId         String?
+  industryId        String?
+  article           Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  company           Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  industryRef       Industry? @relation(fields: [industryId], references: [id], onDelete: SetNull)
+
+  @@index([breachDate])
+}
+
+model Incident {
+  id                String   @id @default(cuid())
+  lat               Float
+  lng               Float
+  country           String
+  countryId         String?
+  city              String?
+  type              String
+  severity          Severity
+  intelligenceScore Int      @default(0)
+  articleId         String?  @unique
+  companyId         String?
+  industryId        String?
+  createdAt         DateTime @default(now())
+  article           Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  countryRef        Country? @relation(fields: [countryId], references: [id], onDelete: SetNull)
+  company           Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  industry          Industry? @relation(fields: [industryId], references: [id], onDelete: SetNull)
+  timeline          ThreatTimelineEvent[]
+  iocs              IOCOnIncident[]
+
+  @@index([country])
+}
+
+model CVE {
+  id                 String        @id @default(cuid())
+  cveId              String        @unique
+  cvssScore          Float
+  severity           Severity
+  exploitationStatus ExploitStatus
+  description        String
+  affectedVendors    Json
+  intelligenceScore  Int           @default(0)
+  publishedAt        DateTime
+
+  articles CVEOnArticle[]
+  actors   CVEOnActor[]
+}
+
+model CVEOnArticle {
+  cveId     String
+  articleId String
+  cve       CVE     @relation(fields: [cveId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([cveId, articleId])
+}
+
+model CVEOnActor {
+  cveId   String
+  actorId String
+  cve     CVE         @relation(fields: [cveId], references: [id], onDelete: Cascade)
+  actor   ThreatActor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@id([cveId, actorId])
+}
+
+model Alert {
+  id        String   @id @default(cuid())
+  message   String
+  messageRu String?
+  severity  Severity
+  articleId String?
+  createdAt DateTime @default(now())
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+}
+
+model DailyBriefing {
+  id                      String   @id @default(cuid())
+  date                    DateTime @unique
+  topThreats              Json
+  majorBreaches           Json
+  ransomwareActivity      Json
+  aptCampaigns            Json
+  vulnerabilityHighlights Json
+  generatedAt             DateTime @default(now())
+}
+
+model Source {
+  id          String    @id @default(cuid())
+  name        String
+  rssUrl      String    @unique
+  active      Boolean   @default(true)
+  lastFetched DateTime?
+}
+
+enum ForumTopicStatus {
+  OPEN
+  LOCKED
+  ARCHIVED
+}
+
+model ForumCategory {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  name          String
+  nameRu        String?
+  description   String?
+  descriptionRu String?
+  sortOrder     Int          @default(0)
+  topics        ForumTopic[]
+}
+
+model ForumTopic {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  title       String
+  titleRu     String?
+  content     String
+  contentRu   String?
+  authorName  String
+  status      ForumTopicStatus @default(OPEN)
+  isPinned    Boolean          @default(false)
+  viewCount   Int              @default(0)
+  categoryId  String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  lastReplyAt DateTime?
+
+  category ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  posts    ForumPost[]
+
+  @@index([categoryId])
+  @@index([lastReplyAt])
+  @@index([createdAt])
+}
+
+model ForumPost {
+  id         String   @id @default(cuid())
+  topicId    String
+  authorName String
+  content    String
+  contentRu  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  topic ForumTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@index([topicId, createdAt])
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(EDITOR)
+  createdAt    DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

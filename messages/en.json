@@ -1,0 +1,386 @@
+{
+  "brand": {
+    "name": "CyberBlackmail",
+    "tagline": "Cybersecurity News & Threat Intelligence",
+    "description": "Breaking news on cyber attacks, ransomware, data breaches, and global digital threats."
+  },
+  "nav": {
+    "latest": "Latest",
+    "breaches": "Breaches",
+    "ransomware": "Ransomware",
+    "vulnerabilities": "Vulnerabilities",
+    "actors": "Threat Actors",
+    "darknet": "Dark Web",
+    "iocs": "IOCs",
+    "search": "Search",
+    "alerts": "Alerts",
+    "forum": "Forum"
+  },
+  "ticker": {
+    "breaking": "Breaking"
+  },
+  "sidebar": {
+    "urgent": "Urgent Now",
+    "allAlerts": "All alerts",
+    "inFocus": "In Focus"
+  },
+  "severity": {
+    "CRITICAL": "Critical",
+    "HIGH": "High",
+    "MEDIUM": "Medium",
+    "LOW": "Low"
+  },
+  "category": {
+    "BREAKING_BREACH": "Breach",
+    "RANSOMWARE": "Ransomware",
+    "DARKNET": "Dark Web",
+    "THREAT_INTEL": "Threat Intel",
+    "ZERO_DAY": "Zero-Day",
+    "DATA_LEAK": "Data Leak",
+    "APT": "APT",
+    "CYBER_DEFENSE": "Defense"
+  },
+  "article": {
+    "readTime": "{minutes} min read",
+    "timeline": "Attack Timeline",
+    "iocs": "Indicators of Compromise",
+    "actors": "Attributed Actors",
+    "untranslatedBadge": "Original in English",
+    "untranslatedNotice": "This report was imported from an English-language source. A Russian translation will be added shortly."
+  },
+  "timeline": {
+    "empty": "No timeline events available",
+    "eventTitle": "{stage} detected",
+    "eventDescription": "Analysts identified {stage} activity consistent with {actor} TTPs during incident response.",
+    "incidentPhase": "Incident phase {n}",
+    "stages": {
+      "INITIAL_ACCESS": "Initial Access",
+      "RECONNAISSANCE": "Reconnaissance",
+      "PRIVILEGE_ESCALATION": "Privilege Escalation",
+      "LATERAL_MOVEMENT": "Lateral Movement",
+      "DATA_EXFILTRATION": "Data Exfiltration",
+      "RANSOM_DEMAND": "Ransom Demand",
+      "RESOLUTION": "Resolution"
+    }
+  },
+  "ioc": {
+    "empty": "No IOCs recorded",
+    "copy": "Copy",
+    "copied": "Copied",
+    "types": {
+      "IP": "IP Address",
+      "DOMAIN": "Domain",
+      "URL": "URL",
+      "HASH": "Hash",
+      "EMAIL": "Email"
+    }
+  },
+  "analysis": {
+    "executiveSummary": "Executive Summary",
+    "attackVector": "Attack Vector",
+    "impact": "Impact Assessment",
+    "targetIndustry": "Target Industry",
+    "mitigations": "Recommended Mitigations"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "subtitle": "{count} alerts in the feed",
+    "empty": "No active alerts."
+  },
+  "searchUi": {
+    "placeholder": "Search threats, actors, IOCs, CVEs…",
+    "scanning": "Scanning intelligence database…",
+    "noQuery": "Type to search the intelligence archive.",
+    "noResults": "No matches found.",
+    "pageTitle": "Global Search",
+    "pageSubtitle": "Search the intelligence database.",
+    "resultsFor": "{count} results for \"{query}\"",
+    "hint": "Use the search button in the header or press Ctrl+K.",
+    "sections": {
+      "articles": "Threat Reports",
+      "actors": "Threat Actors",
+      "companies": "Companies",
+      "cves": "CVEs",
+      "iocs": "IOCs",
+      "breaches": "Breaches",
+      "countries": "Countries"
+    },
+    "notFound": "No results found for \"{query}\"."
+  },
+  "actorsPage": {
+    "title": "Threat Actor Database",
+    "subtitle": "{count} APT groups, ransomware operators, and cybercrime organizations tracked.",
+    "reports": "{count} reports",
+    "campaigns": "{count} campaigns",
+    "aliases": "Aliases",
+    "motivation": "Motivation",
+    "intelReports": "Intelligence Reports",
+    "viewRansomware": "View Ransomware Profile",
+    "unknownOrigin": "Unknown origin"
+  },
+  "briefingPage": {
+    "title": "Daily Intelligence Briefing",
+    "empty": "No briefing available yet.",
+    "generated": "{date} · Generated {generatedAt}",
+    "topThreats": "Top Threats",
+    "majorBreaches": "Major Breaches",
+    "ransomwareActivity": "Ransomware Activity",
+    "aptCampaigns": "APT Campaigns",
+    "vulnHighlights": "Vulnerability Highlights",
+    "newVictims": "New victims this period",
+    "recordsSector": "{records} records · {sector}"
+  },
+  "contactPage": {
+    "title": "Contact",
+    "subtitle": "Reach our intelligence team for partnerships, tips, or platform inquiries.",
+    "name": "Name",
+    "email": "Email",
+    "organization": "Organization",
+    "message": "Message",
+    "submit": "Send Message",
+    "successTitle": "Message sent.",
+    "successBody": "Our team will respond within 48 hours."
+  },
+  "ransomwarePage": {
+    "title": "Ransomware Tracker",
+    "subtitle": "{count} active and historical ransomware groups monitored.",
+    "victims": "{count} victims",
+    "lastSeen": "Last seen {date}",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "detailSubtitle": "{status} · {count} victims",
+    "lastObserved": "Last observed: {date}",
+    "targetIndustries": "Target Industries",
+    "targetCountries": "Target Countries",
+    "viewActorProfile": "View Threat Actor Profile"
+  },
+  "vulnsPage": {
+    "title": "CVE Center",
+    "subtitle": "{count} vulnerabilities in the intelligence database.",
+    "cveId": "CVE ID",
+    "cvss": "CVSS",
+    "severity": "Severity",
+    "exploitStatus": "Exploit Status",
+    "vendors": "Vendors",
+    "reports": "Reports",
+    "published": "Published",
+    "detailSubtitle": "CVSS {score} · {status}",
+    "relatedReports": "Related Reports",
+    "exploitedBy": "Exploited By",
+    "publishedOn": "Published {date}"
+  },
+  "countriesPage": {
+    "title": "Country Intelligence",
+    "subtitle": "Geopolitical threat scores and incident activity by nation.",
+    "code": "Code",
+    "country": "Country",
+    "region": "Region",
+    "intelScore": "Intel Score",
+    "incidents": "Incidents",
+    "actors": "Actors",
+    "detailSubtitle": "{code} · {region}",
+    "global": "Global",
+    "recentIncidents": "Recent Incidents",
+    "associatedActors": "Associated Threat Actors"
+  },
+  "companiesPage": {
+    "title": "Company Intelligence",
+    "subtitle": "{count} organizations tracked in the breach and incident database.",
+    "incidents": "{count} incidents",
+    "breaches": "{count} breaches",
+    "reports": "{count} reports",
+    "hq": "HQ: {location}",
+    "breachesSection": "Breaches",
+    "relatedReports": "Related Reports",
+    "records": "Records",
+    "organization": "Organization",
+    "date": "Date",
+    "severity": "Severity",
+    "noBreaches": "No breaches recorded."
+  },
+  "industriesPage": {
+    "title": "Industry Risk Analysis",
+    "subtitle": "Sector-level threat intelligence and breach exposure metrics.",
+    "breaches": "{count} breaches",
+    "incidents": "{count} incidents",
+    "campaigns": "{count} campaigns",
+    "sectorBreaches": "Sector Breaches",
+    "activeCampaigns": "Active Campaigns",
+    "organization": "Organization",
+    "records": "Records",
+    "date": "Date",
+    "severity": "Severity"
+  },
+  "intelPage": {
+    "title": "Threat Intelligence Reports",
+    "subtitle": "{count} reports in the intelligence archive."
+  },
+  "breachesPage": {
+    "title": "Breach Database",
+    "subtitle": "{count} data breaches analyzed and catalogued."
+  },
+  "iocsPage": {
+    "title": "IOC Explorer",
+    "subtitle": "Search and filter indicators of compromise across the threat intelligence database."
+  },
+  "darknetPage": {
+    "title": "Darknet Monitor",
+    "subtitle": "{count} darknet intelligence reports from underground forums and marketplaces.",
+    "feedNote": "Curated feed from underground forums, leak sites, and marketplaces."
+  },
+  "threatMapPage": {
+    "title": "Global Threat Map",
+    "subtitle": "{count} active incidents tracked across the threat landscape."
+  },
+  "footer": {
+    "coverage": "Coverage",
+    "intel": "Intelligence",
+    "company": "Company",
+    "latest": "Latest",
+    "breaches": "Breaches",
+    "ransomware": "Ransomware",
+    "vulnerabilities": "Vulnerabilities",
+    "actors": "Threat Actors",
+    "alerts": "Alerts",
+    "forum": "Forum",
+    "threatMap": "Threat Map",
+    "briefing": "Daily Briefing",
+    "about": "About",
+    "contact": "Contact",
+    "blurb": "Independent cybersecurity newsroom covering breaches, ransomware, and global digital threats.",
+    "rights": "All rights reserved.",
+    "disclaimer": "For research and awareness. Not financial or legal advice."
+  },
+  "about": {
+    "title": "About CyberBlackmail",
+    "subtitle": "An independent cybersecurity newsroom",
+    "intro": "We cover breaking cyber incidents, threat actor activity, and data breaches for security teams, journalists, and researchers.",
+    "missionTitle": "Mission",
+    "mission": "CyberBlackmail aggregates and contextualizes global cyber threats with editorial clarity — not dashboard noise.",
+    "coverageTitle": "Coverage",
+    "linkLatest": "Latest Intelligence",
+    "linkBreaches": "Breach Database",
+    "linkRansomware": "Ransomware Tracker",
+    "linkActors": "Threat Actor Profiles",
+    "linkMap": "Global Threat Map",
+    "linkBriefing": "Daily Briefing",
+    "sourcesTitle": "Sources",
+    "sources": "Reports combine open-source intelligence, vendor advisories, breach disclosures, and in-house analysis."
+  },
+  "common": {
+    "skip": "Skip",
+    "language": "Language",
+    "english": "English",
+    "russian": "Русский",
+    "all": "All",
+    "intelScore": "Intel Score",
+    "threatScore": "Threat Score",
+    "riskScore": "Risk Score"
+  },
+  "threatMap": {
+    "title": "Global Threat Map",
+    "activeIncidents": "{count} active incidents"
+  },
+  "intelFilters": {
+    "searchPlaceholder": "Search reports…",
+    "allCategories": "All categories",
+    "allSeverities": "All severities"
+  },
+  "breachesTable": {
+    "searchPlaceholder": "Search organizations, industries, data types…",
+    "empty": "No breaches found.",
+    "organization": "Organization",
+    "records": "Records",
+    "severity": "Severity",
+    "industry": "Industry",
+    "date": "Date",
+    "report": "Report",
+    "view": "View"
+  },
+  "iocExplorer": {
+    "searchPlaceholder": "Search IOC values…",
+    "all": "All",
+    "empty": "No IOCs match your filters.",
+    "type": "Type",
+    "value": "Value",
+    "threat": "Threat",
+    "score": "Score",
+    "refs": "Refs",
+    "lastSeen": "Last seen",
+    "showing": "Showing {filtered} of {total} indicators"
+  },
+  "notFound": {
+    "title": "Intelligence Not Found",
+    "description": "The requested resource does not exist in our database.",
+    "back": "Return to homepage"
+  },
+  "forumNav": {
+    "branch": "Community",
+    "forum": "Forum",
+    "home": "Board",
+    "newTopic": "New topic",
+    "backToNews": "News site"
+  },
+  "homePage": {
+    "sectionLabel": "Intelligence",
+    "featuredInvestigation": "Featured Investigation",
+    "investigationVisual": "Threat analysis",
+    "highConfidence": "High confidence",
+    "analystDesk": "CyberBlackmail Intelligence Desk",
+    "statThreats": "Threats tracked",
+    "statBreaches": "Breaches analyzed",
+    "statCountries": "Countries affected",
+    "statAlerts": "Critical alerts",
+    "statThreatLevel": "Global threat level",
+    "topThreatsToday": "Top Threats Today",
+    "latestReports": "Latest Intelligence Reports",
+    "threatActors": "Threat Actors",
+    "vulnerabilityWatch": "Vulnerability Watch",
+    "ransomwareTracker": "Ransomware Tracker",
+    "countryIntel": "Country Threat Intelligence",
+    "industryRisk": "Industry Risk Center",
+    "viewAll": "View all",
+    "intelScore": "Intel score",
+    "severity": "Severity",
+    "summary": "Summary",
+    "victims": "victims",
+    "liveIntel": "Live intelligence",
+    "globalAttackMap": "Global Cyber Attack Map",
+    "mapActive": "{count} active incidents mapped",
+    "dailyBriefing": "Daily briefing",
+    "briefingCta": "Read today's intelligence briefing"
+  },
+  "forumPage": {
+    "title": "CyberBlackmail Forum",
+    "subtitle": "{count} active discussions across threat intel, ransomware, and defense.",
+    "categorySubtitle": "Topics in {name}",
+    "allCategories": "All",
+    "topicsCount": "{count} topics",
+    "colTopic": "Topic",
+    "colCategory": "Category",
+    "colReplies": "Replies",
+    "colViews": "Views",
+    "colActivity": "Last activity",
+    "pinned": "Pinned",
+    "by": "by",
+    "empty": "No topics yet. Start the conversation.",
+    "newTopicTitle": "New topic",
+    "newTopicSubtitle": "Share field notes, questions, or analysis with the community.",
+    "category": "Category",
+    "topicTitle": "Title",
+    "displayName": "Display name",
+    "message": "Message",
+    "postTopic": "Post topic",
+    "postReply": "Post reply",
+    "posting": "Posting…",
+    "createError": "Could not create topic. Try again.",
+    "replyError": "Could not post reply. Try again.",
+    "reply": "Reply",
+    "replies": "replies",
+    "views": "views",
+    "topicClosed": "This topic is closed to new replies.",
+    "originalPost": "Original post",
+    "moderationNote": "All posts are reviewed by a moderator before publication.",
+    "pendingModeration": "Submitted for review. Your post will appear after moderator approval."
+  }
+}

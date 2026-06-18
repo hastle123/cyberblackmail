@@ -1,0 +1,384 @@
+{
+  "brand": {
+    "name": "CyberBlackmail",
+    "tagline": "Кибербезопасность и разведка угроз",
+    "description": "Срочные новости о кибератаках, ransomware, утечках данных и глобальных цифровых угрозах."
+  },
+  "nav": {
+    "latest": "Свежее",
+    "breaches": "Утечки",
+    "ransomware": "Ransomware",
+    "vulnerabilities": "Уязвимости",
+    "actors": "Группировки",
+    "darknet": "Даркнет",
+    "iocs": "IOC",
+    "search": "Поиск",
+    "alerts": "Алерты",
+    "forum": "Форум"
+  },
+  "ticker": {
+    "breaking": "Срочно"
+  },
+  "sidebar": {
+    "urgent": "Срочно сейчас",
+    "allAlerts": "Все алерты",
+    "inFocus": "В фокусе"
+  },
+  "severity": {
+    "CRITICAL": "Критично",
+    "HIGH": "Высокий",
+    "MEDIUM": "Средний",
+    "LOW": "Низкий"
+  },
+  "category": {
+    "BREAKING_BREACH": "Утечка",
+    "RANSOMWARE": "Ransomware",
+    "DARKNET": "Даркнет",
+    "THREAT_INTEL": "Разведка",
+    "ZERO_DAY": "Zero-Day",
+    "DATA_LEAK": "Слив данных",
+    "APT": "APT",
+    "CYBER_DEFENSE": "Защита"
+  },
+  "article": {
+    "readTime": "{minutes} мин чтения",
+    "timeline": "Хронология атаки",
+    "iocs": "Индикаторы компрометации",
+    "actors": "Связанные группировки",
+    "untranslatedBadge": "Оригинал на английском",
+    "untranslatedNotice": "Материал импортирован из англоязычного источника. Русский перевод появится после обработки — запустите npm run translate или дождитесь автоматического ingest."
+  },
+  "timeline": {
+    "empty": "События хронологии отсутствуют",
+    "eventTitle": "{stage}: обнаружено",
+    "eventDescription": "Аналитики зафиксировали этап «{stage}» в ходе реагирования; паттерн согласуется с TTP {actor}.",
+    "incidentPhase": "Этап инцидента {n}",
+    "stages": {
+      "INITIAL_ACCESS": "Первичный доступ",
+      "RECONNAISSANCE": "Разведка",
+      "PRIVILEGE_ESCALATION": "Повышение привилегий",
+      "LATERAL_MOVEMENT": "Боковое перемещение",
+      "DATA_EXFILTRATION": "Эксфильтрация данных",
+      "RANSOM_DEMAND": "Требование выкупа",
+      "RESOLUTION": "Ликвидация инцидента"
+    }
+  },
+  "ioc": {
+    "empty": "Индикаторы не зафиксированы",
+    "copy": "Копировать",
+    "copied": "Скопировано",
+    "types": {
+      "IP": "IP-адрес",
+      "DOMAIN": "Домен",
+      "URL": "URL",
+      "HASH": "Хеш",
+      "EMAIL": "Email"
+    }
+  },
+  "analysis": {
+    "executiveSummary": "Краткое резюме",
+    "attackVector": "Вектор атаки",
+    "impact": "Оценка последствий",
+    "targetIndustry": "Целевая отрасль",
+    "mitigations": "Рекомендуемые меры"
+  },
+  "alerts": {
+    "title": "Алерты",
+    "subtitle": "{count} алертов в ленте",
+    "empty": "Активных алертов нет."
+  },
+  "searchUi": {
+    "placeholder": "Поиск угроз, группировок, IOC, CVE…",
+    "scanning": "Сканирование базы разведки…",
+    "noQuery": "Введите запрос для поиска.",
+    "noResults": "Совпадений не найдено.",
+    "pageTitle": "Глобальный поиск",
+    "pageSubtitle": "Поиск по базе разведывательных данных.",
+    "resultsFor": "{count} результатов по запросу «{query}»",
+    "hint": "Кнопка поиска в шапке или Ctrl+K.",
+    "sections": {
+      "articles": "Отчёты",
+      "actors": "Группировки",
+      "companies": "Компании",
+      "cves": "CVE",
+      "iocs": "IOC",
+      "breaches": "Утечки",
+      "countries": "Страны"
+    },
+    "notFound": "По запросу «{query}» ничего не найдено."
+  },
+  "actorsPage": {
+    "title": "База группировок",
+    "subtitle": "{count} APT, операторов ransomware и киберпреступных групп в базе.",
+    "reports": "{count} отчётов",
+    "campaigns": "{count} кампаний",
+    "aliases": "Псевдонимы",
+    "motivation": "Мотивация",
+    "intelReports": "Разведывательные отчёты",
+    "viewRansomware": "Профиль ransomware",
+    "unknownOrigin": "Происхождение неизвестно"
+  },
+  "briefingPage": {
+    "title": "Ежедневная сводка",
+    "empty": "Сводка пока недоступна.",
+    "generated": "{date} · Сформировано {generatedAt}",
+    "topThreats": "Главные угрозы",
+    "majorBreaches": "Крупные утечки",
+    "ransomwareActivity": "Активность ransomware",
+    "aptCampaigns": "Кампании APT",
+    "vulnHighlights": "Уязвимости",
+    "newVictims": "Новых жертв за период",
+    "recordsSector": "{records} записей · {sector}"
+  },
+  "contactPage": {
+    "title": "Контакты",
+    "subtitle": "Свяжитесь с редакцией по партнёрству, инсайдам или вопросам о платформе.",
+    "name": "Имя",
+    "email": "Email",
+    "organization": "Организация",
+    "message": "Сообщение",
+    "submit": "Отправить",
+    "successTitle": "Сообщение отправлено.",
+    "successBody": "Мы ответим в течение 48 часов."
+  },
+  "ransomwarePage": {
+    "title": "Трекер ransomware",
+    "subtitle": "{count} активных и архивных групп в базе.",
+    "victims": "{count} жертв",
+    "lastSeen": "Активность {date}",
+    "statusActive": "Активна",
+    "statusInactive": "Неактивна",
+    "detailSubtitle": "{status} · {count} жертв",
+    "lastObserved": "Последняя активность: {date}",
+    "targetIndustries": "Целевые отрасли",
+    "targetCountries": "Целевые страны",
+    "viewActorProfile": "Профиль группировки"
+  },
+  "vulnsPage": {
+    "title": "Центр CVE",
+    "subtitle": "{count} уязвимостей в базе разведки.",
+    "cveId": "CVE ID",
+    "cvss": "CVSS",
+    "severity": "Критичность",
+    "exploitStatus": "Статус эксплуатации",
+    "vendors": "Вендоры",
+    "reports": "Отчёты",
+    "published": "Опубликовано",
+    "detailSubtitle": "CVSS {score} · {status}",
+    "relatedReports": "Связанные отчёты",
+    "exploitedBy": "Эксплуатируется",
+    "publishedOn": "Опубликовано {date}"
+  },
+  "countriesPage": {
+    "title": "Разведка по странам",
+    "subtitle": "Геополитические оценки угроз и инциденты по странам.",
+    "code": "Код",
+    "country": "Страна",
+    "region": "Регион",
+    "intelScore": "Оценка",
+    "incidents": "Инциденты",
+    "actors": "Группировки",
+    "detailSubtitle": "{code} · {region}",
+    "global": "Глобально",
+    "recentIncidents": "Недавние инциденты",
+    "associatedActors": "Связанные группировки"
+  },
+  "companiesPage": {
+    "title": "Разведка по компаниям",
+    "subtitle": "{count} организаций в базе инцидентов и утечек.",
+    "incidents": "{count} инцидентов",
+    "breaches": "{count} утечек",
+    "reports": "{count} отчётов",
+    "hq": "Штаб-квартира: {location}",
+    "breachesSection": "Утечки",
+    "relatedReports": "Связанные отчёты",
+    "records": "Записей",
+    "organization": "Организация",
+    "date": "Дата",
+    "severity": "Критичность",
+    "noBreaches": "Утечек не зафиксировано."
+  },
+  "industriesPage": {
+    "title": "Риски по отраслям",
+    "subtitle": "Угрозы и утечки на уровне секторов экономики.",
+    "breaches": "{count} утечек",
+    "incidents": "{count} инцидентов",
+    "campaigns": "{count} кампаний",
+    "sectorBreaches": "Утечки в секторе",
+    "activeCampaigns": "Активные кампании",
+    "organization": "Организация",
+    "records": "Записей",
+    "date": "Дата",
+    "severity": "Критичность"
+  },
+  "intelPage": {
+    "title": "Разведывательные отчёты",
+    "subtitle": "{count} отчётов в архиве."
+  },
+  "breachesPage": {
+    "title": "База утечек",
+    "subtitle": "{count} утечек данных в каталоге."
+  },
+  "iocsPage": {
+    "title": "Обозреватель IOC",
+    "subtitle": "Поиск и фильтрация индикаторов компрометации."
+  },
+  "darknetPage": {
+    "title": "Мониторинг даркнета",
+    "subtitle": "{count} отчётов с форумов и площадок.",
+    "feedNote": "Курируемая лента с подпольных форумов, leak-сайтов и маркетплейсов."
+  },
+  "threatMapPage": {
+    "title": "Карта угроз",
+    "subtitle": "{count} активных инцидентов на карте."
+  },
+  "footer": {
+    "coverage": "Разделы",
+    "intel": "Разведка",
+    "company": "О проекте",
+    "latest": "Свежее",
+    "breaches": "Утечки",
+    "ransomware": "Ransomware",
+    "vulnerabilities": "Уязвимости",
+    "actors": "Группировки",
+    "alerts": "Алерты",
+    "forum": "Форум",
+    "threatMap": "Карта угроз",
+    "briefing": "Сводка дня",
+    "about": "О нас",
+    "contact": "Контакты",
+    "blurb": "Независимое издание о кибератаках, ransomware и цифровых угрозах.",
+    "rights": "Все права защищены.",
+    "disclaimer": "Только для исследования и осведомлённости. Не является юридической или финансовой консультацией."
+  },
+  "about": {
+    "title": "О CyberBlackmail",
+    "subtitle": "Независимое издание о кибербезопасности",
+    "intro": "Мы освещаем инциденты, активность группировок и утечки данных для специалистов по безопасности, журналистов и исследователей.",
+    "missionTitle": "Миссия",
+    "mission": "CyberBlackmail собирает и объясняет глобальные киберугрозы редакционным языком — без шума дашбордов.",
+    "coverageTitle": "Разделы",
+    "linkLatest": "Свежая разведка",
+    "linkBreaches": "База утечек",
+    "linkRansomware": "Трекер ransomware",
+    "linkActors": "Профили группировок",
+    "linkMap": "Карта угроз",
+    "linkBriefing": "Сводка дня",
+    "sourcesTitle": "Источники",
+    "sources": "Материалы основаны на OSINT, рекомендациях вендоров, публичных утечках и собственной аналитике."
+  },
+  "common": {
+    "skip": "Пропустить",
+    "language": "Язык",
+    "english": "English",
+    "russian": "Русский",
+    "all": "Все",
+    "intelScore": "Оценка разведки",
+    "threatScore": "Уровень угрозы",
+    "riskScore": "Уровень риска"
+  },
+  "threatMap": {
+    "title": "Карта угроз",
+    "activeIncidents": "{count} активных инцидентов"
+  },
+  "intelFilters": {
+    "searchPlaceholder": "Поиск отчётов…",
+    "allCategories": "Все категории",
+    "allSeverities": "Вся критичность"
+  },
+  "breachesTable": {
+    "searchPlaceholder": "Поиск по организациям, отраслям, типам данных…",
+    "empty": "Утечек не найдено.",
+    "organization": "Организация",
+    "records": "Записей",
+    "severity": "Критичность",
+    "industry": "Отрасль",
+    "date": "Дата",
+    "report": "Отчёт",
+    "view": "Открыть"
+  },
+  "iocExplorer": {
+    "searchPlaceholder": "Поиск по значению IOC…",
+    "all": "Все",
+    "empty": "Нет IOC по заданным фильтрам.",
+    "type": "Тип",
+    "value": "Значение",
+    "threat": "Угроза",
+    "score": "Оценка",
+    "refs": "Связи",
+    "lastSeen": "Последнее",
+    "showing": "Показано {filtered} из {total} индикаторов"
+  },
+  "notFound": {
+    "title": "Разведданные не найдены",
+    "description": "Запрошенный ресурс отсутствует в нашей базе данных.",
+    "back": "На главную"
+  },
+  "forumNav": {
+    "branch": "Сообщество",
+    "forum": "Форум",
+    "home": "Лента",
+    "newTopic": "Новая тема",
+    "backToNews": "К новостям"
+  },
+  "homePage": {
+    "sectionLabel": "Разведка",
+    "featuredInvestigation": "Главное расследование",
+    "investigationVisual": "Анализ угроз",
+    "highConfidence": "Высокая достоверность",
+    "analystDesk": "Редакция CyberBlackmail",
+    "statThreats": "Угроз отслеживается",
+    "statBreaches": "Утечек проанализировано",
+    "statCountries": "Стран затронуто",
+    "statAlerts": "Критических алертов",
+    "statThreatLevel": "Глобальный уровень угроз",
+    "topThreatsToday": "Главные угрозы сегодня",
+    "latestReports": "Свежие отчёты",
+    "threatActors": "Группировки",
+    "vulnerabilityWatch": "Уязвимости",
+    "ransomwareTracker": "Ransomware",
+    "countryIntel": "Угрозы по странам",
+    "industryRisk": "Риски по отраслям",
+    "viewAll": "Все",
+    "intelScore": "Intel score",
+    "severity": "Критичность",
+    "summary": "Описание",
+    "victims": "жертв",
+    "liveIntel": "Live intelligence",
+    "globalAttackMap": "Карта кибератак",
+    "mapActive": "{count} активных инцидентов на карте",
+    "dailyBriefing": "Сводка дня",
+    "briefingCta": "Читать ежедневную сводку"
+  },
+  "forumPage": {
+    "title": "Форум CyberBlackmail",
+    "subtitle": "{count} обсуждений: threat intel, ransomware и защита.",
+    "categorySubtitle": "Темы в разделе «{name}»",
+    "allCategories": "Все",
+    "topicsCount": "{count} тем",
+    "colTopic": "Тема",
+    "colCategory": "Раздел",
+    "colReplies": "Ответы",
+    "colViews": "Просмотры",
+    "colActivity": "Активность",
+    "pinned": "Закреп",
+    "by": "от",
+    "empty": "Пока нет тем. Начните обсуждение.",
+    "newTopicTitle": "Новая тема",
+    "newTopicSubtitle": "Поделитесь заметками с поля, вопросами или разбором.",
+    "category": "Раздел",
+    "topicTitle": "Заголовок",
+    "displayName": "Имя",
+    "message": "Сообщение",
+    "postTopic": "Опубликовать",
+    "postReply": "Ответить",
+    "posting": "Публикация…",
+    "createError": "Не удалось создать тему. Попробуйте снова.",
+    "replyError": "Не удалось отправить ответ. Попробуйте снова.",
+    "reply": "Ответить",
+    "replies": "ответов",
+    "views": "просмотров",
+    "topicClosed": "Тема закрыта для новых ответов.",
+    "originalPost": "Первое сообщение"
+  }
+}

@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-panel: #111111;
+  --color-bg-elevated: #1a1a1a;
+  --color-bg-card: #141414;
+  --color-accent-red: #c41e1e;
+  --color-accent-red-bright: #e52525;
+  --color-accent-red-dim: #8b1515;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #6b6b6b;
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-strong: rgba(196, 30, 30, 0.25);
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(196, 30, 30, 0.35);
+  color: #fff;
+}
+
+.glass-panel,
+.soc-panel {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.glass-panel {
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: none;
+  }
+}
+
+.editorial-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  transition: border-color 0.15s ease;
+}
+
+.editorial-card:hover {
+  border-color: var(--color-border-strong);
+}
+
+.wordmark {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 0.625rem 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table td {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.data-table tr:hover td {
+  background: rgba(196, 30, 30, 0.04);
+}
+
+.intel-link {
+  color: var(--color-accent-red-bright);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.intel-link:hover {
+  color: #ff4444;
+  text-decoration: underline;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-animate {
+  animation: ticker 50s linear infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-animate,
+  .animate-fade-up {
+    animation: none;
+  }
+}
