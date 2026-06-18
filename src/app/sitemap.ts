@@ -33,17 +33,6 @@ function localePath(locale: string, path: string) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, actors, companies, countries, industries, cves, ransomware, forumTopics] = await Promise.all([
-    prisma.article.findMany({ select: { slug: true, updatedAt: true } }),
-    prisma.threatActor.findMany({ select: { slug: true, createdAt: true } }),
-    prisma.company.findMany({ select: { slug: true, createdAt: true } }),
-    prisma.country.findMany({ select: { code: true } }),
-    prisma.industry.findMany({ select: { slug: true } }),
-    prisma.cVE.findMany({ select: { cveId: true, publishedAt: true } }),
-    prisma.ransomwareGroup.findMany({ select: { slug: true, lastSeen: true } }),
-    prisma.forumTopic.findMany({ select: { slug: true, updatedAt: true } }),
-  ]);
-
   const staticRoutes: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
     STATIC_PATHS.map((path) => ({
       url: `${BASE_URL}${localePath(locale, path)}`,
@@ -53,7 +42,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
-  const dynamicRoutes = (locale: string): MetadataRoute.Sitemap => [
+  try {
+    const [articles, actors, companies, countries, industries, cves, ransomware, forumTopics] =
+      await Promise.all([
+        prisma.article.findMany({ select: { slug: true, updatedAt: true } }),
+        prisma.threatActor.findMany({ select: { slug: true, createdAt: true } }),
+        prisma.company.findMany({ select: { slug: true, createdAt: true } }),
+        prisma.country.findMany({ select: { code: true } }),
+        prisma.industry.findMany({ select: { slug: true } }),
+        prisma.cVE.findMany({ select: { cveId: true, publishedAt: true } }),
+        prisma.ransomwareGroup.findMany({ select: { slug: true, lastSeen: true } }),
+        prisma.forumTopic.findMany({ select: { slug: true, updatedAt: true } }),
+      ]);
+
+    const dynamicRoutes = (locale: string): MetadataRoute.Sitemap => [
     ...articles.map((a) => ({
       url: `${BASE_URL}${localePath(locale, `/intel/${a.slug}`)}`,
       lastModified: a.updatedAt,
@@ -104,8 +106,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  return [
-    ...staticRoutes,
-    ...routing.locales.flatMap((locale) => dynamicRoutes(locale)),
-  ];
+    return [
+      ...staticRoutes,
+      ...routing.locales.flatMap((locale) => dynamicRoutes(locale)),
+    ];
+  } catch {
+    return staticRoutes;
+  }
 }

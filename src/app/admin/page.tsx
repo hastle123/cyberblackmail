@@ -4,6 +4,7 @@ import { getPlatformStats } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Admin", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const stats = await getPlatformStats();
