@@ -3,6 +3,7 @@ import type { Category, Severity } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { uniqueSlug } from "@/lib/slugify";
 import { classifyArticle, estimateReadTime } from "./classify";
+import { geolocateIncident, incidentTypeFromCategory } from "./geolocate";
 import { buildRussianFields } from "./translate";
 
 type FeedItem = {
@@ -123,6 +124,26 @@ export async function ingestRssFeeds(): Promise<IngestResult> {
             sourceUrl: link,
             readTime: estimateReadTime(`${title} ${content}`),
             publishedAt,
+          },
+        });
+
+        const geo = geolocateIncident(`${title} ${excerpt}`, slug);
+        const countryRef = await prisma.country.findUnique({
+          where: { code: geo.countryCode },
+          select: { id: true },
+        });
+
+        await prisma.incident.create({
+          data: {
+            lat: geo.lat,
+            lng: geo.lng,
+            country: geo.country,
+            city: geo.city,
+            type: incidentTypeFromCategory(category),
+            severity,
+            intelligenceScore: article.intelligenceScore,
+            articleId: article.id,
+            countryId: countryRef?.id,
           },
         });
 

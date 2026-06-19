@@ -93,7 +93,7 @@ export async function Homepage() {
           alerts={data.alerts}
           trending={data.trending}
           briefingDate={data.briefing?.generatedAt}
-          mapSlot={<ThreatMapPreview incidentCount={data.incidents.length} />}
+          mapSlot={<ThreatMapPreview incidents={data.incidents} />}
         />
       </div>
     </div>

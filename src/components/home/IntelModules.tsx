@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SectionHeader } from "@/components/home/SectionHeader";
 import { SeverityBadge } from "@/components/intel/SeverityBadge";
+import { AttackMap } from "@/components/map/AttackMap";
 import { editorial } from "@/lib/editorial";
 import type { Severity, GroupStatus } from "@prisma/client";
 
@@ -216,34 +217,29 @@ export async function IndustryRiskGrid({ industries }: { industries: Industry[] 
 }
 
 export async function ThreatMapPreview({
-  incidentCount,
+  incidents,
 }: {
-  incidentCount: number;
+  incidents: {
+    lat: number;
+    lng: number;
+    severity: Severity;
+    country: string;
+    type: string;
+    article?: { slug: string } | null;
+  }[];
 }) {
   const t = await getTranslations("homePage");
 
   return (
-    <Link
-      href="/threat-map"
-      className={`group block ${editorial.card} overflow-hidden`}
-    >
-      <div className="border-b border-white/[0.06] bg-[#0f0f0f] px-4 py-3">
+    <div className={`${editorial.card} overflow-hidden`}>
+      <Link href="/threat-map" className="block border-b border-white/[0.06] bg-[#0f0f0f] px-4 py-3 transition-colors hover:bg-[#141414]">
         <p className={editorial.sectionLabel}>{t("liveIntel")}</p>
         <h3 className="mt-1 font-serif text-base font-semibold text-[#f5f5f5]">
           {t("globalAttackMap")}
         </h3>
-      </div>
-      <div className="relative flex h-36 items-end bg-gradient-to-br from-[#141414] to-[#0a0a0a] p-4">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute left-[20%] top-[30%] h-2 w-2 rounded-full bg-[#dc2626]" />
-          <div className="absolute left-[45%] top-[50%] h-1.5 w-1.5 rounded-full bg-[#b91c1c]" />
-          <div className="absolute left-[70%] top-[25%] h-2 w-2 rounded-full bg-[#dc2626]" />
-          <div className="absolute left-[55%] top-[65%] h-1 w-1 rounded-full bg-[#737373]" />
-        </div>
-        <p className={`relative ${editorial.bodySm}`}>
-          {t("mapActive", { count: incidentCount })}
-        </p>
-      </div>
-    </Link>
+        <p className={`mt-1 ${editorial.bodySm}`}>{t("mapActive", { count: incidents.length })}</p>
+      </Link>
+      <AttackMap incidents={incidents} height={200} compact className="border-0 shadow-none" />
+    </div>
   );
 }

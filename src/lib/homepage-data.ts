@@ -67,7 +67,7 @@ export async function getHomepageData() {
     ransomware: ransomware.slice(0, 5),
     countries: countries.slice(0, 6),
     industries: industries.slice(0, 6),
-    incidents: incidents.slice(0, 8),
+    incidents: incidents.slice(0, 30),
     stats,
     briefing,
   };

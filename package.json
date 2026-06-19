@@ -13,6 +13,7 @@
     "db:setup": "prisma db push && tsx prisma/seed.ts",
     "ingest": "tsx scripts/ingest-rss.ts",
     "ingest:setup": "tsx scripts/ensure-rss-sources.ts",
+    "map:backfill": "tsx scripts/backfill-map-incidents.ts",
     "translate": "tsx scripts/translate-articles.ts",
     "translate:clean": "tsx scripts/clean-fake-translations.ts",
     "postinstall": "prisma generate"

@@ -39,6 +39,7 @@ type AttackMapProps = {
   className?: string;
   height?: number;
   fullPage?: boolean;
+  compact?: boolean;
 };
 
 function normalizeIncident(incident: IncidentInput): MapIncident {
@@ -71,7 +72,7 @@ function PulsingMarker({ severity }: { severity: Severity }) {
   );
 }
 
-export function AttackMap({ incidents, className, height = 420, fullPage }: AttackMapProps) {
+export function AttackMap({ incidents, className, height = 420, fullPage, compact }: AttackMapProps) {
   const router = useRouter();
   const t = useTranslations("threatMap");
   const tSev = useTranslations("severity");
@@ -86,12 +87,14 @@ export function AttackMap({ incidents, className, height = 420, fullPage }: Atta
 
   return (
     <div className={cn(`${editorial.panel} relative overflow-hidden`, className)}>
-      <div className="absolute left-4 top-4 z-10">
-        <p className={editorial.sectionTitle}>{t("title")}</p>
-        <p className={`mt-1 text-xs text-[#e52525] ${editorial.meta}`}>
-          {t("activeIncidents", { count: validIncidents.length })}
-        </p>
-      </div>
+      {!compact && (
+        <div className="absolute left-4 top-4 z-10">
+          <p className={editorial.sectionTitle}>{t("title")}</p>
+          <p className={`mt-1 text-xs text-[#e52525] ${editorial.meta}`}>
+            {t("activeIncidents", { count: validIncidents.length })}
+          </p>
+        </div>
+      )}
 
       <div style={{ height: mapHeight }} className="w-full bg-[#050505]">
         <ComposableMap
@@ -140,17 +143,19 @@ export function AttackMap({ incidents, className, height = 420, fullPage }: Atta
         </ComposableMap>
       </div>
 
-      <div className={`flex flex-wrap items-center gap-4 border-t border-white/[0.08] px-4 py-2 ${editorial.meta}`}>
-        {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as Severity[]).map((sev) => (
-          <div key={sev} className="flex items-center gap-1.5">
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ backgroundColor: SEVERITY_COLORS[sev] }}
-            />
-            <span>{tSev(sev)}</span>
-          </div>
-        ))}
-      </div>
+      {!compact && (
+        <div className={`flex flex-wrap items-center gap-4 border-t border-white/[0.08] px-4 py-2 ${editorial.meta}`}>
+          {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as Severity[]).map((sev) => (
+            <div key={sev} className="flex items-center gap-1.5">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: SEVERITY_COLORS[sev] }}
+              />
+              <span>{tSev(sev)}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

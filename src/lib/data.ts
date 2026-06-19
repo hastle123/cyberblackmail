@@ -53,14 +53,19 @@ export async function getRecentArticles(limit = 6) {
   });
 }
 
-export async function getMapIncidents() {
-  return prisma.incident.findMany({
+export async function getMapIncidents(limit = 50) {
+  const incidents = await prisma.incident.findMany({
     include: {
-      article: { select: { slug: true, title: true, titleRu: true } },
+      article: { select: { slug: true, title: true, titleRu: true, publishedAt: true } },
       countryRef: { select: { code: true, name: true } },
     },
-    orderBy: { createdAt: "desc" },
-    take: 50,
+    take: Math.min(limit, 200),
+  });
+
+  return incidents.sort((a, b) => {
+    const aTime = a.article?.publishedAt?.getTime() ?? a.createdAt.getTime();
+    const bTime = b.article?.publishedAt?.getTime() ?? b.createdAt.getTime();
+    return bTime - aTime;
   });
 }
 
