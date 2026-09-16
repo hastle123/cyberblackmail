@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   ComposableMap,
@@ -10,11 +9,29 @@ import {
   Marker,
   ZoomableGroup,
 } from "react-simple-maps";
-import { SEVERITY_COLORS, cn } from "@/lib/constants";
+import { cn } from "@/lib/constants";
+import { useRouter } from "@/i18n/navigation";
 import { editorial } from "@/lib/editorial";
+import { SEVERITY_HEX } from "@/lib/severity";
 import type { Severity } from "@prisma/client";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+const SEVERITY_RANK: Record<Severity, number> = {
+  CRITICAL: 4,
+  HIGH: 3,
+  MEDIUM: 2,
+  LOW: 1,
+};
+
+const PULSE_RADIUS: Record<Severity, number> = {
+  CRITICAL: 10,
+  HIGH: 9,
+  MEDIUM: 8,
+  LOW: 7,
+};
+
+const LEGEND_COLORS = SEVERITY_HEX;
 
 export type MapIncident = {
   lat: number;
@@ -57,18 +74,69 @@ function normalizeIncident(incident: IncidentInput): MapIncident {
   };
 }
 
+function dedupeByLocation(incidents: MapIncident[]): MapIncident[] {
+  const byKey = new Map<string, MapIncident>();
+  for (const incident of incidents) {
+    const key = `${incident.lat.toFixed(1)}:${incident.lng.toFixed(1)}`;
+    const existing = byKey.get(key);
+    if (!existing) {
+      byKey.set(key, incident);
+      continue;
+    }
+
+    const keepNew = SEVERITY_RANK[incident.severity] >= SEVERITY_RANK[existing.severity];
+    const primary = keepNew ? incident : existing;
+    const secondary = keepNew ? existing : incident;
+    byKey.set(key, {
+      ...primary,
+      articleSlug: primary.articleSlug ?? secondary.articleSlug,
+    });
+  }
+  return [...byKey.values()];
+}
+
 function PulsingMarker({ severity }: { severity: Severity }) {
-  const color = SEVERITY_COLORS[severity];
+  const maxR = PULSE_RADIUS[severity];
+  const core = 3.5;
+  const color = SEVERITY_HEX[severity];
   return (
-    <g>
-      <circle r={8} fill={color} opacity={0.2}>
-        <animate attributeName="r" values="4;12;4" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite" />
+    <g pointerEvents="none">
+      <circle r={maxR} fill={color} opacity={0.3}>
+        <animate
+          attributeName="r"
+          values={`${core + 1};${maxR};${core + 1}`}
+          dur="2.5s"
+          repeatCount="indefinite"
+        />
+        <animate attributeName="opacity" values="0.4;0.22;0.4" dur="2.5s" repeatCount="indefinite" />
       </circle>
-      <circle r={4} fill={color} stroke="#050505" strokeWidth={1}>
-        <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite" />
-      </circle>
+      <circle r={core} fill={color} stroke="#070708" strokeWidth={1} />
     </g>
+  );
+}
+
+function MarkerHitTarget({
+  articleSlug,
+  label,
+  onNavigate,
+}: {
+  articleSlug: string;
+  label: string;
+  onNavigate: (slug: string) => void;
+}) {
+  return (
+    <circle
+      r={14}
+      fill="transparent"
+      className="cursor-pointer"
+      role="link"
+      aria-label={label}
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onNavigate(articleSlug);
+      }}
+    />
   );
 }
 
@@ -77,70 +145,79 @@ export function AttackMap({ incidents, className, height = 420, fullPage, compac
   const t = useTranslations("threatMap");
   const tSev = useTranslations("severity");
   const mapHeight = fullPage ? 560 : height;
-  const validIncidents = useMemo(
+  const visibleIncidents = useMemo(
     () =>
-      incidents
-        .map(normalizeIncident)
-        .filter((i) => Number.isFinite(i.lat) && Number.isFinite(i.lng)),
+      dedupeByLocation(
+        incidents
+          .map(normalizeIncident)
+          .filter((i) => Number.isFinite(i.lat) && Number.isFinite(i.lng)),
+      ),
     [incidents],
   );
+
+  // Projection math differs in the last float digits between server and browser,
+  // which trips a hydration mismatch; the geo data is fetched client-side anyway.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className={cn(`${editorial.panel} relative overflow-hidden`, className)}>
       {!compact && (
         <div className="absolute left-4 top-4 z-10">
           <p className={editorial.sectionTitle}>{t("title")}</p>
-          <p className={`mt-1 text-xs text-[#e52525] ${editorial.meta}`}>
-            {t("activeIncidents", { count: validIncidents.length })}
+          <p className={`mt-1 text-xs text-accent-strong ${editorial.meta}`}>
+            {t("activeIncidents", { count: visibleIncidents.length })}
           </p>
         </div>
       )}
 
-      <div style={{ height: mapHeight }} className="w-full bg-[#050505]">
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{ scale: fullPage ? 160 : 140 }}
-          width={800}
-          height={mapHeight}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <ZoomableGroup center={[10, 20]} zoom={1}>
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map((geo) => (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill="#141414"
-                    stroke="rgba(196, 30, 30, 0.12)"
-                    strokeWidth={0.4}
-                    style={{
-                      default: { outline: "none" },
-                      hover: { fill: "#1a1a1a", outline: "none" },
-                      pressed: { outline: "none" },
-                    }}
-                  />
-                ))
-              }
-            </Geographies>
+      <div style={{ height: mapHeight }} className="w-full bg-[radial-gradient(ellipse_at_center,#0f0f13_0%,#070708_75%)]">
+        {mounted && (
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: fullPage ? 160 : 140 }}
+            width={800}
+            height={mapHeight}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <ZoomableGroup center={[10, 20]} zoom={1}>
+              <Geographies geography={GEO_URL}>
+                {({ geographies }) =>
+                  geographies.map((geo) => (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill="#16161b"
+                      stroke="rgba(255, 255, 255, 0.06)"
+                      strokeWidth={0.4}
+                      style={{
+                        default: { outline: "none" },
+                        hover: { fill: "#1f1f25", outline: "none" },
+                        pressed: { outline: "none" },
+                      }}
+                    />
+                  ))
+                }
+              </Geographies>
 
-            {validIncidents.map((incident, i) => (
-              <Marker key={`${incident.lat}-${incident.lng}-${i}`} coordinates={[incident.lng, incident.lat]}>
-                <g
-                  className={incident.articleSlug ? "cursor-pointer" : undefined}
-                  onClick={
-                    incident.articleSlug
-                      ? () => router.push(`/intel/${incident.articleSlug}`)
-                      : undefined
-                  }
-                >
-                  <PulsingMarker severity={incident.severity} />
-                  <title>{`${incident.type} — ${incident.country}`}</title>
-                </g>
-              </Marker>
-            ))}
-          </ZoomableGroup>
-        </ComposableMap>
+              {visibleIncidents.map((incident, i) => (
+                <Marker key={`${incident.lat}-${incident.lng}-${i}`} coordinates={[incident.lng, incident.lat]}>
+                  <g>
+                    <PulsingMarker severity={incident.severity} />
+                    {incident.articleSlug ? (
+                      <MarkerHitTarget
+                        articleSlug={incident.articleSlug}
+                        label={`${incident.type} — ${incident.country}`}
+                        onNavigate={(slug) => router.push(`/intel/${slug}`)}
+                      />
+                    ) : null}
+                    <title>{`${incident.type} — ${incident.country}`}</title>
+                  </g>
+                </Marker>
+              ))}
+            </ZoomableGroup>
+          </ComposableMap>
+        )}
       </div>
 
       {!compact && (
@@ -149,7 +226,7 @@ export function AttackMap({ incidents, className, height = 420, fullPage, compac
             <div key={sev} className="flex items-center gap-1.5">
               <span
                 className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: SEVERITY_COLORS[sev] }}
+                style={{ backgroundColor: LEGEND_COLORS[sev] }}
               />
               <span>{tSev(sev)}</span>
             </div>

@@ -1,5 +1,15 @@
 import { prisma } from "./prisma";
 import type { Severity, Category, Prisma } from "@prisma/client";
+import {
+  getPlatformBySlug,
+  getPlatformsByGroup,
+  isValidScamTopic,
+  isValidScamGroup,
+  isScamArticleContent,
+  SCAM_TOPICS,
+  type ScamTopic,
+  type ScamPlatformGroup,
+} from "./scams";
 
 export async function getPlatformStats() {
   const [
@@ -53,6 +63,18 @@ export async function getRecentArticles(limit = 6) {
   });
 }
 
+/** Newest imports first — for homepage “just added” feeds. */
+export async function getRecentlyAddedArticles(limit = 12) {
+  return prisma.article.findMany({
+    take: limit,
+    orderBy: { createdAt: "desc" },
+    include: {
+      actors: { include: { actor: { select: { name: true, slug: true } } } },
+      companies: { include: { company: { select: { name: true, slug: true } } } },
+    },
+  });
+}
+
 export async function getMapIncidents(limit = 50) {
   const incidents = await prisma.incident.findMany({
     include: {
@@ -75,6 +97,7 @@ export async function getArticles(filters?: {
   limit?: number;
   skip?: number;
   search?: string;
+  sortBy?: "publishedAt" | "createdAt";
 }) {
   const where: Prisma.ArticleWhereInput = {};
   if (filters?.category) where.category = filters.category;
@@ -91,7 +114,7 @@ export async function getArticles(filters?: {
       where,
       take: filters?.limit ?? 20,
       skip: filters?.skip ?? 0,
-      orderBy: { publishedAt: "desc" },
+      orderBy: { [filters?.sortBy ?? "publishedAt"]: "desc" },
       include: {
         actors: { include: { actor: { select: { name: true, slug: true } } } },
         companies: { include: { company: { select: { name: true, slug: true } } } },
@@ -101,6 +124,67 @@ export async function getArticles(filters?: {
   ]);
 
   return { items, total };
+}
+
+function keywordClauses(keywords: string[]): Prisma.ArticleWhereInput[] {
+  return keywords.flatMap((keyword) => [
+    { title: { contains: keyword, mode: "insensitive" as const } },
+    { excerpt: { contains: keyword, mode: "insensitive" as const } },
+    { content: { contains: keyword, mode: "insensitive" as const } },
+  ]);
+}
+
+export async function getScamArticles(filters?: {
+  topic?: ScamTopic;
+  platform?: string;
+  group?: ScamPlatformGroup;
+  limit?: number;
+  skip?: number;
+  search?: string;
+}) {
+  const and: Prisma.ArticleWhereInput[] = [{ category: "SCAMS" }];
+
+  if (filters?.topic && isValidScamTopic(filters.topic)) {
+    const topic = SCAM_TOPICS.find((t) => t.id === filters.topic);
+    if (topic) and.push({ OR: keywordClauses(topic.keywords) });
+  }
+
+  if (filters?.platform) {
+    const platform = getPlatformBySlug(filters.platform);
+    if (platform) and.push({ OR: keywordClauses(platform.keywords) });
+  } else if (filters?.group && isValidScamGroup(filters.group)) {
+    const platforms = getPlatformsByGroup(filters.group);
+    if (platforms.length > 0) {
+      and.push({ OR: platforms.flatMap((p) => keywordClauses(p.keywords)) });
+    }
+  }
+
+  if (filters?.search) {
+    and.push({
+      OR: [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { excerpt: { contains: filters.search, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  const where: Prisma.ArticleWhereInput = { AND: and };
+
+  const candidates = await prisma.article.findMany({
+    where,
+    orderBy: { publishedAt: "desc" },
+    include: {
+      actors: { include: { actor: { select: { name: true, slug: true } } } },
+      companies: { include: { company: { select: { name: true, slug: true } } } },
+    },
+  });
+
+  const filtered = candidates.filter((a) => isScamArticleContent(a.title, a.excerpt));
+  const skip = filters?.skip ?? 0;
+  const limit = filters?.limit ?? 50;
+  const items = filtered.slice(skip, skip + limit);
+
+  return { items, total: filtered.length };
 }
 
 export async function getArticleBySlug(slug: string) {

@@ -1,5 +1,8 @@
-import { config } from "dotenv";
-config();
+import dotenv from "dotenv";
+import { resolve } from "path";
+
+dotenv.config();
+dotenv.config({ path: resolve(process.cwd(), ".env.local"), override: true });
 
 import { ingestRssFeeds } from "../src/lib/ingest/rss";
 

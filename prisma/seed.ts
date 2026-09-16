@@ -527,8 +527,8 @@ export async function main() {
         lastFetched: daysAgo(0),
       },
       {
-        name: "The Record",
-        rssUrl: "https://therecord.media/feed/",
+        name: "Threatpost",
+        rssUrl: "https://threatpost.com/feed/",
         active: true,
         lastFetched: daysAgo(0),
       },

@@ -1,5 +1,6 @@
 # One-time setup: scheduled RSS ingest + desktop shortcut to start site
 $ErrorActionPreference = "Stop"
+. "$PSScriptRoot\task-common.ps1"
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $IngestScript = Join-Path $ProjectRoot "scripts\auto-ingest.ps1"
 $TranslateScript = Join-Path $ProjectRoot "scripts\auto-translate.ps1"
@@ -10,42 +11,17 @@ if (-not (Test-Path -LiteralPath $LogsDir)) {
   New-Item -ItemType Directory -Path $LogsDir | Out-Null
 }
 
-function Register-HourlyTask {
-  param(
-    [string]$Name,
-    [string]$ScriptPath,
-    [int]$HoursInterval = 1
-  )
+Register-HiddenScheduledTask -TaskName "CyberBlackmail-Ingest" `
+  -ScriptPath $IngestScript -WorkingDirectory $ProjectRoot -Schedule Hourly
 
-  Unregister-ScheduledTask -TaskName $Name -Confirm:$false -ErrorAction SilentlyContinue
-
-  $action = New-ScheduledTaskAction `
-    -Execute "powershell.exe" `
-    -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$ScriptPath`"" `
-    -WorkingDirectory $ProjectRoot
-
-  $trigger = New-ScheduledTaskTrigger `
-    -Once `
-    -At (Get-Date).AddMinutes(1) `
-    -RepetitionInterval (New-TimeSpan -Hours $HoursInterval) `
-    -RepetitionDuration (New-TimeSpan -Days 3650)
-
-  Register-ScheduledTask `
-    -TaskName $Name `
-    -Action $action `
-    -Trigger $trigger `
-    -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries) `
-    -Force | Out-Null
-}
-
-Register-HourlyTask -Name "CyberBlackmail-Ingest" -ScriptPath $IngestScript -HoursInterval 1
-Register-HourlyTask -Name "CyberBlackmail-Translate" -ScriptPath $TranslateScript -HoursInterval 4
+Register-HiddenScheduledTask -TaskName "CyberBlackmail-Translate" `
+  -ScriptPath $TranslateScript -WorkingDirectory $ProjectRoot -Schedule Hours4
 
 $WshShell = New-Object -ComObject WScript.Shell
 $Desktop = [Environment]::GetFolderPath("Desktop")
 $Shortcut = $WshShell.CreateShortcut((Join-Path $Desktop "CyberBlackmail Site.lnk"))
 $Shortcut.TargetPath = "powershell.exe"
-$Shortcut.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$StartScript`""
+$Shortcut.Arguments = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$StartScript`""
 $Shortcut.WorkingDirectory = $ProjectRoot
 $Shortcut.IconLocation = "powershell.exe,0"
 $Shortcut.Description = "Start CyberBlackmail (localhost:3000)"

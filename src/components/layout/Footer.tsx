@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Wordmark } from "@/components/layout/Wordmark";
-import { editorial } from "@/lib/editorial";
 
 export async function Footer() {
   const t = await getTranslations("footer");
@@ -12,6 +11,7 @@ export async function Footer() {
       title: t("coverage"),
       links: [
         { href: "/intel", label: t("latest") },
+        { href: "/scams", label: t("scams") },
         { href: "/breaches", label: t("breaches") },
         { href: "/ransomware", label: t("ransomware") },
         { href: "/vulnerabilities", label: t("vulnerabilities") },
@@ -37,23 +37,29 @@ export async function Footer() {
   ] as const;
 
   return (
-    <footer className="mt-16 border-t border-white/[0.07] bg-[#080808]">
-      <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_2fr]">
+    <footer className="relative mt-24 border-t border-line bg-[#050506]">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+        aria-hidden
+      />
+      <div className="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+        <div className="grid gap-12 md:grid-cols-[1.1fr_2fr]">
           <div>
-            <Wordmark />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[#6b6b6b]">{t("blurb")}</p>
+            <Wordmark large />
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-fg-3">{t("blurb")}</p>
           </div>
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             {sections.map((section) => (
               <div key={section.title}>
-                <h3 className={editorial.sectionTitle}>{section.title}</h3>
-                <ul className="mt-3 space-y-2">
+                <h3 className="font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-fg-4">
+                  {section.title}
+                </h3>
+                <ul className="mt-4 space-y-2.5">
                   {section.links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-sm text-[#a3a3a3] transition-colors hover:text-[#e52525]"
+                        className="text-sm text-fg-2 transition-colors hover:text-fg"
                       >
                         {link.label}
                       </Link>
@@ -64,11 +70,11 @@ export async function Footer() {
             ))}
           </div>
         </div>
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.06] pt-6">
-          <p className="text-xs text-[#555]">
+        <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 text-xs text-fg-4 md:flex-row md:items-center md:justify-between">
+          <p>
             © {year} CyberBlackmail. {t("rights")}
           </p>
-          <p className="text-xs text-[#555]">{t("disclaimer")}</p>
+          <p className="max-w-xl md:text-right">{t("disclaimer")}</p>
         </div>
       </div>
     </footer>

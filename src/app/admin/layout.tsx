@@ -1,15 +1,21 @@
-import { IBM_Plex_Sans, Newsreader } from "next/font/google";
+import { Inter, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 
-const sans = IBM_Plex_Sans({
+const sans = Inter({
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const serif = Newsreader({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-serif",
+const serif = Source_Serif_4({
+  subsets: ["latin", "cyrillic"],
+  axes: ["opsz"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -17,8 +23,12 @@ export const dynamic = "force-dynamic";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${sans.variable} ${serif.variable} antialiased`}>{children}</body>
+    <html
+      lang="en"
+      className={`dark ${sans.variable} ${serif.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

@@ -9,7 +9,8 @@ import { IOCBlock } from "@/components/intel/IOCBlock";
 import { editorial } from "@/lib/editorial";
 import { formatDate } from "@/lib/constants";
 import { getArticleBySlug } from "@/lib/data";
-import { localizeAnalysis, localizeArticle, isArticleTranslated } from "@/lib/localize";
+import { localizeAnalysis, localizeArticle, isArticleTranslated, hasQualityRussianBody } from "@/lib/localize";
+import { cleanFeedSnippet, isRssSummaryOnly } from "@/lib/article-text";
 import type { Locale } from "@/i18n/routing";
 
 type Props = { params: Promise<{ slug: string; locale: string }> };
@@ -38,7 +39,14 @@ export default async function IntelDetailPage({ params }: Props) {
   const iocs = raw.iocs.map(({ ioc }) => ioc);
 
   const actorNames = raw.actors.map(({ actor }) => actor.name);
-  const untranslated = locale === "ru" && !isArticleTranslated(raw);
+  const untranslated = locale === "ru" && (!isArticleTranslated(raw) || !hasQualityRussianBody(raw.contentRu));
+  const excerpt = cleanFeedSnippet(article.excerpt);
+  const content = cleanFeedSnippet(article.content);
+  const rssSummary = isRssSummaryOnly(excerpt, content, raw.sourceUrl);
+  const editorialSplit = content.split("\n\n---\n\n");
+  const hasEditorial = editorialSplit.length >= 2;
+  const editorialText = hasEditorial ? editorialSplit[0] : null;
+  const bodyText = hasEditorial ? editorialSplit.slice(1).join("\n\n---\n\n") : content;
 
   return (
     <IntelShell maxWidth="wide">
@@ -58,12 +66,12 @@ export default async function IntelDetailPage({ params }: Props) {
           </h1>
 
           {untranslated && (
-            <p className={`mt-4 rounded-lg border border-white/[0.08] bg-[#141414] p-4 ${editorial.body}`}>
+            <p className={`mt-4 text-sm leading-relaxed text-[#8a8a8a] ${editorial.body}`}>
               {t("untranslatedNotice")}
             </p>
           )}
 
-          <p className="mt-4 text-lg leading-relaxed text-[#a3a3a3]">{article.excerpt}</p>
+          <p className="mt-4 text-lg leading-relaxed text-[#a3a3a3]">{excerpt}</p>
 
           <div className={`mt-6 flex flex-wrap items-center gap-3 ${editorial.byline}`}>
             <span>{article.source}</span>
@@ -74,10 +82,39 @@ export default async function IntelDetailPage({ params }: Props) {
           </div>
         </header>
 
-        <div
-          className="prose prose-invert max-w-none text-[1.05rem] leading-[1.75] text-[#d4d4d4] prose-headings:font-serif prose-headings:text-[#f0f0f0] prose-a:text-[#e52525]"
-          dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, "<br />") }}
-        />
+        {rssSummary && raw.sourceUrl ? (
+          <div className="rounded-lg border border-white/[0.08] bg-[#141414] p-6">
+            <p className={`${editorial.body} text-[#a3a3a3]`}>{t("rssSummaryNotice")}</p>
+            <a
+              href={raw.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded border border-[#c41e1e]/40 bg-[#c41e1e]/10 px-4 py-2.5 text-sm font-semibold text-[#e52525] transition-colors hover:bg-[#c41e1e]/20"
+            >
+              {t("readFullAtSource", { source: article.source })}
+              <span aria-hidden>↗</span>
+            </a>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {hasEditorial && editorialText && (
+              <section>
+                <h2 className={`mb-3 ${editorial.sectionLabel}`}>{t("editorialAnalysis")}</h2>
+                <div className="max-w-none whitespace-pre-wrap text-[1.05rem] leading-[1.75] text-[#e8e8e8]">
+                  {editorialText}
+                </div>
+              </section>
+            )}
+            <section>
+              {hasEditorial && (
+                <h2 className={`mb-3 ${editorial.sectionLabel}`}>{t("fullReport")}</h2>
+              )}
+              <div className="max-w-none whitespace-pre-wrap text-[1.05rem] leading-[1.75] text-[#d4d4d4]">
+                {bodyText}
+              </div>
+            </section>
+          </div>
+        )}
 
         {analysis && (
           <div className="mt-12">

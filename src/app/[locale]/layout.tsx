@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Newsreader } from "next/font/google";
+import { Inter, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -7,17 +7,25 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { routing, isSupportedLocale } from "@/i18n/routing";
+import { Analytics } from "@vercel/analytics/react";
 
-const sans = IBM_Plex_Sans({
+const sans = Inter({
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const serif = Newsreader({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-serif",
+// Newsreader has no Cyrillic, so RU headlines fell back to faux-bold Georgia
+const serif = Source_Serif_4({
+  subsets: ["latin", "cyrillic"],
+  axes: ["opsz"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -38,6 +46,10 @@ export async function generateMetadata({
     },
     description: t("description"),
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    icons: {
+      icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+      apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
+    },
     openGraph: {
       title: t("name"),
       description: t("description"),
@@ -65,13 +77,18 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className="dark" suppressHydrationWarning>
-      <body className={`${sans.variable} ${serif.variable} antialiased`}>
+    <html
+      lang={locale}
+      className={`dark ${sans.variable} ${serif.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <LiveTicker />
           <main className="min-h-screen">{children}</main>
           <Footer />
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -6,14 +6,16 @@ import { RU_LOCALE_ENABLED, routing } from "@/i18n/routing";
 import { cn } from "@/lib/constants";
 
 export function LocaleSwitcher() {
-  if (!RU_LOCALE_ENABLED || routing.locales.length < 2) return null;
-
-  const locale = useLocale();  const router = useRouter();
+  // Hooks must run before any early return
+  const locale = useLocale();
+  const router = useRouter();
   const pathname = usePathname();
+
+  if (!RU_LOCALE_ENABLED || routing.locales.length < 2) return null;
 
   return (
     <div
-      className="flex items-center rounded border border-white/[0.08] bg-[#141414] p-0.5"
+      className="flex h-9 items-center rounded-lg border border-line bg-surface/80 p-1"
       role="group"
       aria-label="Language"
     >
@@ -22,11 +24,10 @@ export function LocaleSwitcher() {
           key={l}
           type="button"
           onClick={() => router.replace(pathname, { locale: l })}
+          aria-pressed={locale === l}
           className={cn(
-            "rounded px-2 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors",
-            locale === l
-              ? "bg-[#c41e1e]/20 text-[#e52525]"
-              : "text-[#6b6b6b] hover:text-[#f0f0f0]",
+            "h-full rounded-md px-2 font-mono text-[10.5px] font-semibold uppercase tracking-wider transition-colors",
+            locale === l ? "bg-white/[0.09] text-fg" : "text-fg-4 hover:text-fg-2",
           )}
         >
           {l}

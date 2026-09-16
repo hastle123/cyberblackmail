@@ -1,4 +1,5 @@
-import { isArticleTranslated } from "@/lib/article-translated";
+import { isArticleTranslated, hasQualityRussianBody, isRuTitleAcceptable } from "@/lib/article-translated";
+import { decodeHtmlEntities } from "@/lib/article-text";
 
 type LocalizableArticleFields = {
   title: string;
@@ -26,20 +27,29 @@ type LocalizableAnalysis = {
 };
 
 export function localizeArticle<T extends LocalizableArticleFields>(article: T, locale: string): T {
-  if (locale !== "ru" || !isArticleTranslated(article)) return article;
+  if (locale !== "ru" || !isArticleTranslated(article) || !isRuTitleAcceptable(article.title, article.titleRu ?? "")) {
+    return article;
+  }
+  const ruBody = hasQualityRussianBody(article.contentRu) ? article.contentRu : null;
   return {
     ...article,
     title: article.titleRu!,
     excerpt: article.excerptRu ?? article.excerpt,
-    content: article.contentRu ?? article.content ?? "",
+    content: ruBody ?? article.content ?? "",
   };
 }
 
-export { isArticleTranslated } from "@/lib/article-translated";
+export { isArticleTranslated, hasQualityRussianBody } from "@/lib/article-translated";
 
 export function localizeAlert<T extends LocalizableAlert>(alert: T, locale: string): T {
-  if (locale !== "ru" || !alert.messageRu) return alert;
-  return { ...alert, message: alert.messageRu };
+  if (locale !== "ru") {
+    return { ...alert, message: decodeHtmlEntities(alert.message) };
+  }
+  const ru = alert.messageRu?.trim();
+  if (ru) {
+    return { ...alert, message: decodeHtmlEntities(ru) };
+  }
+  return { ...alert, message: decodeHtmlEntities(alert.message) };
 }
 
 export function localizeAnalysis<T extends LocalizableAnalysis>(analysis: T, locale: string): T {

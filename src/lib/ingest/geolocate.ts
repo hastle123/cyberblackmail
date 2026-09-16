@@ -66,6 +66,8 @@ export function incidentTypeFromCategory(category: string): string {
       return "Zero-Day";
     case "DARKNET":
       return "Darknet";
+    case "SCAMS":
+      return "Online Fraud";
     default:
       return "Cyber Incident";
   }

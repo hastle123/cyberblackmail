@@ -6,7 +6,7 @@ import { editorial } from "@/lib/editorial";
 import type { Category, Severity } from "@prisma/client";
 
 const CATEGORIES: Category[] = [
-  "BREAKING_BREACH", "RANSOMWARE", "DARKNET", "THREAT_INTEL",
+  "BREAKING_BREACH", "RANSOMWARE", "DARKNET", "SCAMS", "THREAT_INTEL",
   "ZERO_DAY", "DATA_LEAK", "APT", "CYBER_DEFENSE",
 ];
 const SEVERITIES: Severity[] = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];

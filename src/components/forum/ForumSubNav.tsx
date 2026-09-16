@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { MastheadLock } from "@/components/layout/Wordmark";
+import { BrandLogo } from "@/components/brand/Logo";
 import { cn } from "@/lib/constants";
 
 const LINKS = [
@@ -24,15 +23,8 @@ export function ForumSubNav() {
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#c41e1e]">
               {t("branch")}
             </p>
-            <p className="flex items-center gap-1.5 leading-none">
-              <Image
-                src="/brand/masthead-text.png"
-                alt="CyberBlackmail"
-                width={748}
-                height={120}
-                className="masthead-logo h-[15px] w-auto opacity-90"
-              />
-              <MastheadLock className="masthead-lock h-[10px] w-auto text-[#ebebeb]" />
+            <p className="flex items-center gap-2 leading-none">
+              <BrandLogo className="text-[10.5px]" />
               <span className="text-[11px] font-medium text-[#737373]">{t("forum")}</span>
             </p>
           </div>

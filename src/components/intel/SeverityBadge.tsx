@@ -1,31 +1,46 @@
-"use client";
-
+// Shared component: no "use client", so it renders on the server when imported
+// from Server Components and uses the client provider when imported from client ones.
 import { useTranslations } from "next-intl";
 import type { Severity } from "@prisma/client";
-
-const STYLES: Record<Severity, string> = {
-  CRITICAL: "bg-[#c41e1e]/15 text-[#e52525] border-[#c41e1e]/40",
-  HIGH: "bg-[#c41e1e]/10 text-[#c41e1e] border-[#c41e1e]/30",
-  MEDIUM: "bg-[#8b4040]/10 text-[#a06060] border-[#8b4040]/25",
-  LOW: "bg-[#2a2a2a] text-[#6b6b6b] border-[#333]",
-};
+import { SEVERITY_BADGE, SEVERITY_BG, SEVERITY_TEXT } from "@/lib/severity";
 
 export function SeverityBadge({
   severity,
   pulse = false,
   small = true,
+  onImage = false,
+  className = "",
 }: {
   severity: Severity;
   pulse?: boolean;
   small?: boolean;
+  /** Solid dark chip that stays legible over photos */
+  onImage?: boolean;
+  className?: string;
 }) {
   const t = useTranslations("severity");
+  const tone = onImage
+    ? `border-white/10 bg-black/75 backdrop-blur-md ${SEVERITY_TEXT[severity]}`
+    : SEVERITY_BADGE[severity];
 
   return (
     <span
-      className={`inline-flex items-center rounded-sm border font-medium uppercase tracking-wide ${STYLES[severity]} ${small ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-0.5 text-[10px]"}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border font-medium ${tone} ${small ? "px-2 py-[3px] text-[10.5px]" : "px-2.5 py-1 text-xs"} ${className}`}
     >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${SEVERITY_BG[severity]} ${pulse ? "animate-pulse" : ""}`}
+        aria-hidden
+      />
       {t(severity)}
     </span>
+  );
+}
+
+export function SeverityDot({ severity, className = "" }: { severity: Severity; className?: string }) {
+  return (
+    <span
+      className={`inline-block h-2 w-2 shrink-0 rounded-full ${SEVERITY_BG[severity]} ${className}`}
+      aria-hidden
+    />
   );
 }

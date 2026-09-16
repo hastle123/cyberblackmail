@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
       criticalAlerts,
       recentArticles,
       severityBreakdown,
+      rssSources,
+      lastIngest,
     ] = await Promise.all([
       prisma.article.count(),
       prisma.breach.count(),
@@ -43,6 +45,16 @@ export async function GET(request: NextRequest) {
       prisma.article.groupBy({
         by: ["severity"],
         _count: { severity: true },
+      }),
+      prisma.source.findMany({
+        where: { active: true },
+        select: { name: true, lastFetched: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.auditLog.findFirst({
+        where: { action: "INGEST_CREATE" },
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true, entity: true },
       }),
     ]);
 
@@ -66,6 +78,11 @@ export async function GET(request: NextRequest) {
         severity,
         count: _count.severity,
       })),
+      rss: {
+        sources: rssSources,
+        lastIngestAt: lastIngest?.createdAt ?? null,
+        lastIngestArticle: lastIngest?.entity ?? null,
+      },
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {

@@ -237,6 +237,7 @@ export const CATEGORY_RU: Record<string, string> = {
   BREAKING_BREACH: "утечка данных",
   RANSOMWARE: "ransomware",
   DARKNET: "даркнет",
+  SCAMS: "скамы",
   THREAT_INTEL: "разведка угроз",
   ZERO_DAY: "zero-day",
   DATA_LEAK: "слив данных",

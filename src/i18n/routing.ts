@@ -1,7 +1,7 @@
 import { defineRouting } from "next-intl/routing";
 
 /** Flip to `true` to restore /ru, Russian UI, and /ru/forum */
-export const RU_LOCALE_ENABLED = false;
+export const RU_LOCALE_ENABLED = true;
 
 export type Locale = "en" | "ru";
 

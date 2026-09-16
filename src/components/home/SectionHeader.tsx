@@ -7,23 +7,29 @@ export function SectionHeader({
   href,
   linkLabel,
 }: {
-  label: string;
+  label?: string;
   title: string;
   href?: string;
   linkLabel?: string;
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-white/[0.06] pb-4">
-      <div>
-        <p className={editorial.sectionLabel}>{label}</p>
-        <h2 className={`mt-1 ${editorial.sectionTitle}`}>{title}</h2>
+    <div className="mb-6 flex items-end justify-between gap-4">
+      <div className="flex items-center gap-3">
+        <span className="h-6 w-1 shrink-0 rounded-full bg-accent" aria-hidden />
+        <div>
+          {label && <p className={`mb-1 ${editorial.sectionLabel}`}>{label}</p>}
+          <h2 className={editorial.sectionTitle}>{title}</h2>
+        </div>
       </div>
       {href && linkLabel && (
         <Link
           href={href}
-          className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8a8a8a] transition-colors hover:text-[#dc2626]"
+          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line px-3.5 py-1.5 text-xs font-medium text-fg-3 transition-colors hover:border-line-strong hover:bg-white/[0.03] hover:text-fg"
         >
-          {linkLabel} →
+          {linkLabel}
+          <span className="transition-transform group-hover:translate-x-0.5" aria-hidden>
+            →
+          </span>
         </Link>
       )}
     </div>

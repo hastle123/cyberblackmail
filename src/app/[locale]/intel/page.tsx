@@ -23,7 +23,7 @@ export default async function IntelPage({ searchParams }: Props) {
   const t = await getTranslations("intelPage");
   const params = await searchParams;
   const validCategories: Category[] = [
-    "BREAKING_BREACH", "RANSOMWARE", "DARKNET", "THREAT_INTEL",
+    "BREAKING_BREACH", "RANSOMWARE", "DARKNET", "SCAMS", "THREAT_INTEL",
     "ZERO_DAY", "DATA_LEAK", "APT", "CYBER_DEFENSE",
   ];
   const validSeverities: Severity[] = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
@@ -36,6 +36,7 @@ export default async function IntelPage({ searchParams }: Props) {
       ? (params.severity as Severity)
       : undefined,
     search: params.search,
+    sortBy: "publishedAt",
     limit: 50,
   });
 

@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { editorial } from "@/lib/editorial";
 import { FeaturedInvestigation } from "@/components/home/FeaturedInvestigation";
+import { InFocusList } from "@/components/home/InFocusList";
 import { IntelligenceStatsBar } from "@/components/home/IntelligenceStatsBar";
 import { SectionHeader } from "@/components/home/SectionHeader";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/components/home/EditorialArticleCard";
 import {
   ThreatActorsStrip,
+  ScamWatchStrip,
   VulnerabilityWatch,
   RansomwareTracker,
   CountryThreatGrid,
@@ -16,77 +17,63 @@ import {
   ThreatMapPreview,
 } from "@/components/home/IntelModules";
 import { HomeSidebar } from "@/components/home/HomeSidebar";
+import { editorial } from "@/lib/editorial";
 import { getHomepageData } from "@/lib/homepage-data";
 
 export async function Homepage() {
   const t = await getTranslations("homePage");
   const data = await getHomepageData();
 
-  const feedRest = data.articles.filter((a) => a.slug !== data.investigation?.slug);
-  const latestReports = feedRest.slice(0, 8);
-  const topThreatCards = data.topThreats.filter((a) => a.slug !== data.investigation?.slug);
-
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8 lg:py-12">
-      {data.investigation && (
-        <FeaturedInvestigation
-          slug={data.investigation.slug}
-          title={data.investigation.title}
-          excerpt={data.investigation.excerpt}
-          category={data.investigation.category}
-          severity={data.investigation.severity}
-          source={data.investigation.source}
-          publishedAt={data.investigation.publishedAt}
-          readTime={data.investigation.readTime}
-          intelligenceScore={data.investigation.intelligenceScore}
-          coverImage={data.investigation.coverImage}
-          titleRu={data.investigation.titleRu}
-          excerptRu={data.investigation.excerptRu}
-        />
-      )}
+    <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 lg:px-8 lg:pt-8">
+      {/* Above the fold: lead story + secondary stories */}
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+        {data.investigation && (
+          <FeaturedInvestigation
+            slug={data.investigation.slug}
+            title={data.investigation.title}
+            excerpt={data.investigation.excerpt}
+            category={data.investigation.category}
+            severity={data.investigation.severity}
+            source={data.investigation.source}
+            publishedAt={data.investigation.publishedAt}
+            readTime={data.investigation.readTime}
+            intelligenceScore={data.investigation.intelligenceScore}
+            coverImage={data.investigation.coverImage}
+            titleRu={data.investigation.titleRu}
+            excerptRu={data.investigation.excerptRu}
+          />
+        )}
+        <InFocusList articles={data.inFocus} />
+      </div>
 
-      <IntelligenceStatsBar stats={data.stats} />
+      <div className="mt-5">
+        <IntelligenceStatsBar stats={data.stats} />
+      </div>
 
-      <div className="grid gap-12 xl:grid-cols-[1fr_320px]">
-        <div className="min-w-0">
-          {topThreatCards.length > 0 && (
-            <section className="mb-12">
-              <SectionHeader
-                label={t("sectionLabel")}
-                title={t("topThreatsToday")}
-                href="/intel"
-                linkLabel={t("viewAll")}
-              />
+      <div className="mt-16 grid gap-12 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="min-w-0 space-y-16">
+          {data.topThreats.length > 0 && (
+            <section>
+              <SectionHeader title={t("topThreatsToday")} href="/intel" linkLabel={t("viewAll")} />
               <div className="grid gap-4 md:grid-cols-2">
-                {topThreatCards.map((article) => (
-                  <EditorialArticleCard key={article.id} article={article} featured />
+                {data.topThreats.map((article) => (
+                  <EditorialArticleCard key={article.slug} article={article} featured />
                 ))}
               </div>
             </section>
           )}
 
-          <section className="mb-12">
-            <SectionHeader
-              label={t("sectionLabel")}
-              title={t("latestReports")}
-              href="/intel"
-              linkLabel={t("viewAll")}
-            />
-            <div className={`${editorial.card} divide-y divide-white/[0.05] px-5`}>
-              {latestReports.map((article) => (
-                <EditorialArticleRow key={article.id} article={article} />
-              ))}
-            </div>
-          </section>
-
-          <ThreatActorsStrip actors={data.actors} />
-          <VulnerabilityWatch cves={data.cves} />
-          <RansomwareTracker groups={data.ransomware} />
-
-          <div className="grid gap-10 md:grid-cols-2">
-            <CountryThreatGrid countries={data.countries} />
-            <IndustryRiskGrid industries={data.industries} />
-          </div>
+          {data.latestReports.length > 0 && (
+            <section>
+              <SectionHeader title={t("latestReports")} href="/intel" linkLabel={t("viewAll")} />
+              <div className={`${editorial.panel} divide-y divide-line px-2 py-1`}>
+                {data.latestReports.map((article) => (
+                  <EditorialArticleRow key={article.slug} article={article} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
 
         <HomeSidebar
@@ -95,6 +82,21 @@ export async function Homepage() {
           briefingDate={data.briefing?.generatedAt}
           mapSlot={<ThreatMapPreview incidents={data.incidents} />}
         />
+      </div>
+
+      <div className="mt-20 space-y-20">
+        <ScamWatchStrip articles={data.scams} />
+        <ThreatActorsStrip actors={data.actors} />
+
+        <div className="grid gap-12 lg:grid-cols-2">
+          <VulnerabilityWatch cves={data.cves} />
+          <RansomwareTracker groups={data.ransomware} />
+        </div>
+
+        <div className="grid gap-12 lg:grid-cols-2">
+          <CountryThreatGrid countries={data.countries} />
+          <IndustryRiskGrid industries={data.industries} />
+        </div>
       </div>
     </div>
   );

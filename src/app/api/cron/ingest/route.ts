@@ -19,8 +19,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await ingestRssFeeds();
-  return NextResponse.json({ ok: true, ...result });
+  const maxCreates = Number(process.env.INGEST_MAX_CREATES ?? "10") || 10;
+  const result = await ingestRssFeeds({
+    skipTranslate: true,
+    maxCreates,
+  });
+  return NextResponse.json({ ok: true, finishedAt: new Date().toISOString(), ...result });
 }
 
 export async function POST(request: NextRequest) {

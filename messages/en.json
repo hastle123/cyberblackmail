@@ -14,7 +14,8 @@
     "iocs": "IOCs",
     "search": "Search",
     "alerts": "Alerts",
-    "forum": "Forum"
+    "forum": "Forum",
+    "scams": "Scams"
   },
   "ticker": {
     "breaking": "Breaking"
@@ -34,6 +35,7 @@
     "BREAKING_BREACH": "Breach",
     "RANSOMWARE": "Ransomware",
     "DARKNET": "Dark Web",
+    "SCAMS": "Scams",
     "THREAT_INTEL": "Threat Intel",
     "ZERO_DAY": "Zero-Day",
     "DATA_LEAK": "Data Leak",
@@ -46,7 +48,11 @@
     "iocs": "Indicators of Compromise",
     "actors": "Attributed Actors",
     "untranslatedBadge": "Original in English",
-    "untranslatedNotice": "This report was imported from an English-language source. A Russian translation will be added shortly."
+    "untranslatedNotice": "This report was imported from an English-language source. A Russian translation will be added shortly.",
+    "rssSummaryNotice": "This page shows a short summary from the RSS feed — not the full article.",
+    "editorialAnalysis": "CyberBlackmail Analysis",
+    "fullReport": "Full Report",
+    "readFullAtSource": "Read full article on {source}"
   },
   "timeline": {
     "empty": "No timeline events available",
@@ -228,6 +234,104 @@
     "subtitle": "{count} darknet intelligence reports from underground forums and marketplaces.",
     "feedNote": "Curated feed from underground forums, leak sites, and marketplaces."
   },
+  "scamsPage": {
+    "title": "Online Scams",
+    "metaDescription": "Crypto, marketplace, and payment fraud — Coinbase, Binance, Wallapop, Vinted, Kleinanzeigen, arrests, and active scam methods.",
+    "subtitle": "{count} reports on internet fraud, crypto scams, marketplace fraud, arrests, and active methods.",
+    "feedNote": "Auto-updated via scam ingest cron. Covers crypto exchanges (Coinbase, Binance), resale platforms, payment apps, pig butchering, drainers, fake support, and law-enforcement busts.",
+    "methodsTitle": "Scam Methods",
+    "platformsTitle": "Monitored Platforms",
+    "platformsNote": "Filter by category or platform. Crypto, marketplaces, payments, social, banking, and travel scams tracked globally.",
+    "allTopics": "All",
+    "allGroups": "All platforms",
+    "searchPlaceholder": "Search scams…",
+    "latestReports": "Latest Scam Reports",
+    "empty": "No reports match these filters yet. The scams cron adds new articles every 15 minutes from fraud-focused feeds.",
+    "reportsForPlatform": "Reports: {platform}",
+    "reportsForGroup": "Reports: {group}",
+    "topics": {
+      "arrests": "Arrests",
+      "methods": "Methods"
+    },
+    "groups": {
+      "crypto": "Crypto & Web3",
+      "marketplace": "Marketplaces",
+      "payments": "Payments",
+      "social": "Social & Messaging",
+      "banking": "Banking",
+      "travel": "Travel"
+    },
+    "reportsForTopic": {
+      "arrests": "Arrests & Busts",
+      "methods": "Scam Methods & Techniques"
+    },
+    "methods": {
+      "fake-payment": {
+        "title": "Fake Payment Screenshots",
+        "desc": "Forged bank transfer or PayPal confirmations pressure victims to ship goods or send crypto before funds clear."
+      },
+      "verification-code": {
+        "title": "Verification Code Theft",
+        "desc": "Scammer tricks victim into sharing 2FA or marketplace codes to hijack Coinbase, bank, or seller accounts."
+      },
+      "triangulation": {
+        "title": "Triangulation Fraud",
+        "desc": "Stolen cards buy from a third seller; criminal resells on a marketplace and pockets the buyer's payment."
+      },
+      "refund-scam": {
+        "title": "Refund / Overpayment",
+        "desc": "Fake overpayment screenshot; victim refunds to a different account while the original payment is reversed."
+      },
+      "phishing-link": {
+        "title": "Phishing Links",
+        "desc": "Fake Coinbase, bank, or marketplace login pages steal credentials, seed phrases, and card data."
+      },
+      "advance-fee": {
+        "title": "Advance Fee Fraud",
+        "desc": "Victim pays deposit, customs, or escrow fee upfront for goods, rentals, or investments that never exist."
+      },
+      "pig-butchering": {
+        "title": "Pig Butchering",
+        "desc": "Long con via dating apps or Telegram: build trust, then push fake crypto investment platforms until funds are gone."
+      },
+      "crypto-drain": {
+        "title": "Wallet Drainers",
+        "desc": "Malicious dApp or NFT approval drains MetaMask, Trust Wallet, or Phantom wallets in one signed transaction."
+      },
+      "fake-support": {
+        "title": "Fake Support",
+        "desc": "Impersonators pose as Coinbase, bank, or Amazon support via phone, chat, or social media to steal access."
+      },
+      "romance-scam": {
+        "title": "Romance Scams",
+        "desc": "Fake relationships on Tinder, Instagram, or WhatsApp lead to wire transfers, gift cards, or crypto sends."
+      },
+      "job-task-scam": {
+        "title": "Job & Task Scams",
+        "desc": "Fake remote work on LinkedIn or Telegram: micro-tasks, then deposits that are stolen funds or advance fees."
+      },
+      "sim-swap": {
+        "title": "SIM Swap",
+        "desc": "Attacker ports phone number to intercept SMS 2FA and drain exchange or bank accounts."
+      },
+      "seed-phrase": {
+        "title": "Seed Phrase Theft",
+        "desc": "Phishing, fake Ledger apps, or support calls trick users into revealing 12–24 word wallet recovery phrases."
+      },
+      "deepfake-voice": {
+        "title": "Deepfake Voice / AI Vishing",
+        "desc": "AI-cloned voices of family or executives used in urgent wire-transfer or crypto emergency calls."
+      },
+      "investment-fraud": {
+        "title": "Fake Investment Platforms",
+        "desc": "Fraudulent trading sites show fake profits; victims deposit crypto or wire money they cannot withdraw."
+      },
+      "mule-recruitment": {
+        "title": "Money Mule Recruitment",
+        "desc": "Victims recruited to receive and forward stolen funds, often via Zelle, Revolut, or crypto mixers."
+      }
+    }
+  },
   "threatMapPage": {
     "title": "Global Threat Map",
     "subtitle": "{count} active incidents tracked across the threat landscape."
@@ -239,6 +343,7 @@
     "latest": "Latest",
     "breaches": "Breaches",
     "ransomware": "Ransomware",
+    "scams": "Scams",
     "vulnerabilities": "Vulnerabilities",
     "actors": "Threat Actors",
     "alerts": "Alerts",
@@ -334,6 +439,7 @@
     "statThreatLevel": "Global threat level",
     "topThreatsToday": "Top Threats Today",
     "latestReports": "Latest Intelligence Reports",
+    "scamWatch": "Online Scam Watch",
     "threatActors": "Threat Actors",
     "vulnerabilityWatch": "Vulnerability Watch",
     "ransomwareTracker": "Ransomware Tracker",
@@ -348,7 +454,15 @@
     "globalAttackMap": "Global Cyber Attack Map",
     "mapActive": "{count} active incidents mapped",
     "dailyBriefing": "Daily briefing",
-    "briefingCta": "Read today's intelligence briefing"
+    "briefingCta": "Read today's intelligence briefing",
+    "readStory": "Read story",
+    "levelLow": "Low",
+    "levelElevated": "Elevated",
+    "levelHigh": "High",
+    "levelCritical": "Critical",
+    "statusActive": "Active",
+    "statusDisrupted": "Disrupted",
+    "statusInactive": "Inactive"
   },
   "forumPage": {
     "title": "CyberBlackmail Forum",

@@ -7,14 +7,15 @@
   "nav": {
     "latest": "Свежее",
     "breaches": "Утечки",
-    "ransomware": "Ransomware",
+    "ransomware": "Вымогатель",
     "vulnerabilities": "Уязвимости",
     "actors": "Группировки",
     "darknet": "Даркнет",
     "iocs": "IOC",
     "search": "Поиск",
     "alerts": "Алерты",
-    "forum": "Форум"
+    "forum": "Форум",
+    "scams": "Скамы"
   },
   "ticker": {
     "breaking": "Срочно"
@@ -32,8 +33,9 @@
   },
   "category": {
     "BREAKING_BREACH": "Утечка",
-    "RANSOMWARE": "Ransomware",
+    "RANSOMWARE": "Вымогатель",
     "DARKNET": "Даркнет",
+    "SCAMS": "Скамы",
     "THREAT_INTEL": "Разведка",
     "ZERO_DAY": "Zero-Day",
     "DATA_LEAK": "Слив данных",
@@ -46,7 +48,11 @@
     "iocs": "Индикаторы компрометации",
     "actors": "Связанные группировки",
     "untranslatedBadge": "Оригинал на английском",
-    "untranslatedNotice": "Материал импортирован из англоязычного источника. Русский перевод появится после обработки — запустите npm run translate или дождитесь автоматического ingest."
+    "untranslatedNotice": "Русский перевод готовится и скоро появится на сайте. Пока доступен оригинал на английском.",
+    "rssSummaryNotice": "Здесь только краткое описание из RSS — не полный текст статьи.",
+    "editorialAnalysis": "Анализ CyberBlackmail",
+    "fullReport": "Полный текст",
+    "readFullAtSource": "Читать полностью на {source}"
   },
   "timeline": {
     "empty": "События хронологии отсутствуют",
@@ -228,6 +234,104 @@
     "subtitle": "{count} отчётов с форумов и площадок.",
     "feedNote": "Курируемая лента с подпольных форумов, leak-сайтов и маркетплейсов."
   },
+  "scamsPage": {
+    "title": "Интернет-скамы",
+    "metaDescription": "Крипто, маркетплейсы и платежи — Coinbase, Binance, Wallapop, Vinted, задержания и методы мошенничества.",
+    "subtitle": "{count} материалов о мошенничестве, крипто-скамах, задержаниях и активных схемах.",
+    "feedNote": "Автообновление через cron скамов. Coinbase, Binance, маркетплейсы, pig butchering, drainers, фейковая поддержка и задержания.",
+    "methodsTitle": "Методы мошенничества",
+    "platformsTitle": "Отслеживаемые площадки",
+    "platformsNote": "Фильтр по категории или площадке: крипто, маркетплейсы, платежи, соцсети, банки, путешествия.",
+    "allTopics": "Все",
+    "allGroups": "Все площадки",
+    "searchPlaceholder": "Поиск скамов…",
+    "latestReports": "Последние отчёты",
+    "empty": "По фильтрам пока пусто. Cron скамов добавляет статьи каждые 15 минут из fraud-лент.",
+    "reportsForPlatform": "Отчёты: {platform}",
+    "reportsForGroup": "Отчёты: {group}",
+    "topics": {
+      "arrests": "Задержания",
+      "methods": "Методы"
+    },
+    "groups": {
+      "crypto": "Крипто и Web3",
+      "marketplace": "Маркетплейсы",
+      "payments": "Платежи",
+      "social": "Соцсети и мессенджеры",
+      "banking": "Банки",
+      "travel": "Путешествия"
+    },
+    "reportsForTopic": {
+      "arrests": "Задержания и разоблачения",
+      "methods": "Методы и схемы"
+    },
+    "methods": {
+      "fake-payment": {
+        "title": "Поддельные скрины оплаты",
+        "desc": "Фейковые подтверждения перевода или PayPal — давление отправить товар или крипту до зачисления."
+      },
+      "verification-code": {
+        "title": "Кража кода подтверждения",
+        "desc": "2FA-коды для захвата Coinbase, банка или аккаунта продавца на маркетплейсе."
+      },
+      "triangulation": {
+        "title": "Триангуляция",
+        "desc": "Покупка на украденную карту у третьего продавца и перепродажа жертве на маркетплейсе."
+      },
+      "refund-scam": {
+        "title": "Возврат / переплата",
+        "desc": "Фейковая переплата — жертва возвращает деньги на другой счёт, исходный платёж отменяется."
+      },
+      "phishing-link": {
+        "title": "Фишинг",
+        "desc": "Поддельные страницы Coinbase, банка или маркетплейса для кражи логинов и seed-фраз."
+      },
+      "advance-fee": {
+        "title": "Предоплата",
+        "desc": "Залог, «таможня» или эскроу за товар, аренду или инвестицию, которых не существует."
+      },
+      "pig-butchering": {
+        "title": "Pig Butchering",
+        "desc": "Долгий развод через Tinder/Telegram: доверие, затем фейковая крипто-платформа и потеря средств."
+      },
+      "crypto-drain": {
+        "title": "Wallet Drainers",
+        "desc": "Вредоносный dApp или NFT-approve сливает MetaMask, Trust Wallet или Phantom за одну подпись."
+      },
+      "fake-support": {
+        "title": "Фейковая поддержка",
+        "desc": "Под видом Coinbase, банка или Amazon по телефону/чату выманивают доступ к аккаунту."
+      },
+      "romance-scam": {
+        "title": "Романтические скамы",
+        "desc": "Фейковые отношения в Tinder, Instagram, WhatsApp → переводы, карты, крипта."
+      },
+      "job-task-scam": {
+        "title": "Работа и таск-скамы",
+        "desc": "Фейковая удалёнка в LinkedIn/Telegram: микрозадачи, затем депозиты или украденные переводы."
+      },
+      "sim-swap": {
+        "title": "SIM Swap",
+        "desc": "Перехват номера для SMS 2FA и слива биржи или банка."
+      },
+      "seed-phrase": {
+        "title": "Кража seed-фразы",
+        "desc": "Фишинг и фейковые Ledger-приложения выманивают 12–24 слова восстановления кошелька."
+      },
+      "deepfake-voice": {
+        "title": "Deepfake / AI-звонки",
+        "desc": "Клон голоса родственника или босса — срочный перевод или крипта."
+      },
+      "investment-fraud": {
+        "title": "Фейковые инвестиции",
+        "desc": "Поддельные биржи показывают прибыль; вывод средств невозможен."
+      },
+      "mule-recruitment": {
+        "title": "Money mule",
+        "desc": "Вербовка для приёма и пересылки украденных денег через Zelle, Revolut или крипту."
+      }
+    }
+  },
   "threatMapPage": {
     "title": "Карта угроз",
     "subtitle": "{count} активных инцидентов на карте."
@@ -238,7 +342,8 @@
     "company": "О проекте",
     "latest": "Свежее",
     "breaches": "Утечки",
-    "ransomware": "Ransomware",
+    "ransomware": "Вымогатель",
+    "scams": "Скамы",
     "vulnerabilities": "Уязвимости",
     "actors": "Группировки",
     "alerts": "Алерты",
@@ -334,21 +439,30 @@
     "statThreatLevel": "Глобальный уровень угроз",
     "topThreatsToday": "Главные угрозы сегодня",
     "latestReports": "Свежие отчёты",
+    "scamWatch": "Мониторинг скамов",
     "threatActors": "Группировки",
     "vulnerabilityWatch": "Уязвимости",
-    "ransomwareTracker": "Ransomware",
+    "ransomwareTracker": "Трекер вымогателей",
     "countryIntel": "Угрозы по странам",
     "industryRisk": "Риски по отраслям",
     "viewAll": "Все",
-    "intelScore": "Intel score",
+    "intelScore": "Оценка разведки",
     "severity": "Критичность",
     "summary": "Описание",
     "victims": "жертв",
-    "liveIntel": "Live intelligence",
+    "liveIntel": "Живая разведка",
     "globalAttackMap": "Карта кибератак",
     "mapActive": "{count} активных инцидентов на карте",
     "dailyBriefing": "Сводка дня",
-    "briefingCta": "Читать ежедневную сводку"
+    "briefingCta": "Читать ежедневную сводку",
+    "readStory": "Читать",
+    "levelLow": "Низкий",
+    "levelElevated": "Повышенный",
+    "levelHigh": "Высокий",
+    "levelCritical": "Критический",
+    "statusActive": "Активна",
+    "statusDisrupted": "Разгромлена",
+    "statusInactive": "Неактивна"
   },
   "forumPage": {
     "title": "Форум CyberBlackmail",

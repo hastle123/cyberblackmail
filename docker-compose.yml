@@ -11,5 +11,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
 volumes:
   pgdata:

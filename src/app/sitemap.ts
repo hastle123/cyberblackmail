@@ -18,6 +18,7 @@ const STATIC_PATHS = [
   "/actors",
   "/ransomware",
   "/darknet",
+  "/scams",
   "/breaches",
   "/intel",
   "/briefing",

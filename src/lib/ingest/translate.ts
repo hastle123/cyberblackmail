@@ -1,4 +1,9 @@
 import { isArticleTranslated } from "@/lib/article-translated";
+import {
+  translateChunkFreeRace,
+  translateLongTextFree,
+} from "@/lib/llm/free-translate";
+import { ollamaGenerate } from "@/lib/llm/ollama";
 
 export { isArticleTranslated };
 
@@ -34,6 +39,20 @@ async function tryLlm(
 ): Promise<RuFields | null> {
   if (isArticleTranslated({ title, titleRu: ru.titleRu })) return ru;
   return null;
+}
+
+async function translateWithOllama(
+  title: string,
+  excerpt: string,
+  body: string,
+  source: string,
+): Promise<RuFields | null> {
+  const raw = await ollamaGenerate(translationPrompt(title, excerpt, body, source), {
+    system: "Ты редактор кибербезопасности. Отвечай только валидным JSON.",
+    json: true,
+    timeoutMs: 240_000,
+  });
+  return tryLlm(title, parseRuFields(raw));
 }
 
 /** Google Gemini — бесплатный ключ: https://aistudio.google.com/apikey */
@@ -150,6 +169,35 @@ type MyMemoryResponse = {
   quotaFinished?: boolean;
 };
 
+/** Lingva + LibreTranslate + MyMemory — параллельно, кто быстрее */
+async function translateWithFreeApis(
+  title: string,
+  excerpt: string,
+  body: string,
+  source: string,
+): Promise<RuFields | null> {
+  try {
+    const titleRu = (await translateChunkFreeRace(title.slice(0, 320), 0.28)).text;
+    const excerptRu = (await translateChunkFreeRace((excerpt || title).slice(0, 480), 0.25)).text;
+    const contentRu = await translateLongTextFree(body.slice(0, 2400), {
+      chunkSize: 450,
+      minRatio: 0.26,
+      parallel: true,
+    });
+
+    if (!isArticleTranslated({ title, titleRu })) return null;
+
+    const footer = `\n\n— Источник: ${source}. Перевод выполнен автоматически.`;
+    return {
+      titleRu,
+      excerptRu: excerptRu !== excerpt ? excerptRu : titleRu,
+      contentRu: contentRu + footer,
+    };
+  } catch {
+    return null;
+  }
+}
+
 async function translateChunkEnRu(text: string, attempt = 0): Promise<string> {
   const q = text.trim().slice(0, 500);
   if (!q) return text;
@@ -223,6 +271,12 @@ export async function buildRussianFields(
   source: string,
 ): Promise<RuFields> {
   const providers: Array<() => Promise<RuFields | null>> = [];
+
+  providers.push(() => translateWithFreeApis(title, excerpt, body, source));
+
+  if (process.env.OLLAMA_HOST?.trim()) {
+    providers.push(() => translateWithOllama(title, excerpt, body, source));
+  }
 
   const geminiKey = process.env.GEMINI_API_KEY?.trim();
   if (geminiKey) {
