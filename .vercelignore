@@ -1,0 +1,11 @@
+# Keep local secrets and working files out of CLI uploads
+.env
+.env.*
+!.env.example
+.savepoints
+.claude
+logs
+*.log
+prisma/dev.db
+prisma/dev.db-journal
+tsconfig.tsbuildinfo
