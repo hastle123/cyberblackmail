@@ -199,10 +199,10 @@ export async function VulnerabilityWatch({ cves }: { cves: Cve[] }) {
   );
 }
 
-const STATUS_STYLE: Record<GroupStatus, { dot: string; text: string }> = {
-  ACTIVE: { dot: "bg-sev-critical", text: "text-sev-critical" },
-  DISRUPTED: { dot: "bg-sev-medium", text: "text-sev-medium" },
-  INACTIVE: { dot: "bg-fg-4", text: "text-fg-3" },
+const STATUS_STYLE: Record<GroupStatus, string> = {
+  ACTIVE: "text-sev-critical",
+  DISRUPTED: "text-sev-medium",
+  INACTIVE: "text-fg-3",
 };
 
 export async function RansomwareTracker({ groups }: { groups: Ransomware[] }) {
@@ -233,10 +233,7 @@ export async function RansomwareTracker({ groups }: { groups: Ransomware[] }) {
                     <h3 className="truncate font-serif text-[15px] font-semibold text-fg transition-colors group-hover:text-white">
                       {g.name}
                     </h3>
-                    <p className={cn("mt-0.5 flex items-center gap-1.5 text-xs", style.text)}>
-                      <span className={cn("h-1.5 w-1.5 rounded-full", style.dot, g.status === "ACTIVE" && "animate-pulse")} />
-                      {statusLabel[g.status]}
-                    </p>
+                    <p className={cn("mt-0.5 text-xs", style)}>{statusLabel[g.status]}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-mono text-base font-semibold tabular-nums text-fg">{fmt.format(g.victimCount)}</p>
@@ -354,10 +351,7 @@ export async function ThreatMapPreview({
         className="group flex items-center justify-between gap-3 border-b border-line px-5 py-3.5 transition-colors hover:bg-white/[0.025]"
       >
         <div>
-          <h3 className="flex items-center gap-2.5 text-sm font-semibold text-fg">
-            <span className="live-dot" aria-hidden />
-            {t("globalAttackMap")}
-          </h3>
+          <h3 className="text-sm font-semibold text-fg">{t("globalAttackMap")}</h3>
           <p className="mt-0.5 text-xs text-fg-4">{t("mapActive", { count: incidents.length })}</p>
         </div>
         <span className="text-fg-4 transition-transform group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden>

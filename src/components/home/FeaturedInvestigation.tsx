@@ -53,10 +53,7 @@ export async function FeaturedInvestigation(props: Props) {
         className="flex h-full min-h-[inherit] flex-col justify-end p-6 md:p-9 lg:p-11"
       >
         <div className="mb-5 flex flex-wrap items-center gap-2">
-          <span className={editorial.breaking}>
-            <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden />
-            {tHome("featuredInvestigation")}
-          </span>
+          <span className={editorial.breaking}>{tHome("featuredInvestigation")}</span>
           <span className={editorial.tag}>{t(props.category)}</span>
           <SeverityBadge severity={props.severity} small={false} onImage />
           {props.intelligenceScore != null && props.intelligenceScore >= 70 && (

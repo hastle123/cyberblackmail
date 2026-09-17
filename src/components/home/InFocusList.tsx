@@ -1,6 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { SeverityDot } from "@/components/intel/SeverityBadge";
 import { CoverImage } from "@/components/news/CoverImage";
 import { editorial } from "@/lib/editorial";
 import { formatRelativeTime } from "@/lib/constants";
@@ -20,10 +19,7 @@ export async function InFocusList({ articles }: { articles: ArticleCardData[] })
   return (
     <aside className={`${editorial.panel} flex flex-col overflow-hidden animate-fade-up`}>
       <div className="flex items-center justify-between border-b border-line px-5 py-4">
-        <h2 className="flex items-center gap-2.5 text-sm font-semibold text-fg">
-          <span className="live-dot" aria-hidden />
-          {tSidebar("inFocus")}
-        </h2>
+        <h2 className="text-sm font-semibold text-fg">{tSidebar("inFocus")}</h2>
         <Link href="/intel" className="text-xs font-medium text-fg-3 transition-colors hover:text-fg">
           {tHome("viewAll")} →
         </Link>
@@ -45,7 +41,6 @@ export async function InFocusList({ articles }: { articles: ArticleCardData[] })
               >
                 <div className="min-w-0 flex-1">
                   <div className="mb-1.5 flex items-center gap-2 text-[11px]">
-                    <SeverityDot severity={raw.severity} className="h-1.5 w-1.5" />
                     <span className={editorial.kicker}>{t(raw.category)}</span>
                     <span className="text-fg-4">{formatRelativeTime(raw.publishedAt, locale)}</span>
                   </div>

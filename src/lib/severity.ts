@@ -22,6 +22,13 @@ export const SEVERITY_BG: Record<Severity, string> = {
   LOW: "bg-sev-low",
 };
 
+export const SEVERITY_BORDER: Record<Severity, string> = {
+  CRITICAL: "border-sev-critical/70",
+  HIGH: "border-sev-high/60",
+  MEDIUM: "border-sev-medium/50",
+  LOW: "border-sev-low/50",
+};
+
 export const SEVERITY_BADGE: Record<Severity, string> = {
   CRITICAL: "border-sev-critical/35 bg-sev-critical/12 text-sev-critical",
   HIGH: "border-sev-high/30 bg-sev-high/10 text-sev-high",

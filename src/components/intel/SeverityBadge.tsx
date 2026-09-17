@@ -2,11 +2,10 @@
 // from Server Components and uses the client provider when imported from client ones.
 import { useTranslations } from "next-intl";
 import type { Severity } from "@prisma/client";
-import { SEVERITY_BADGE, SEVERITY_BG, SEVERITY_TEXT } from "@/lib/severity";
+import { SEVERITY_BADGE, SEVERITY_TEXT } from "@/lib/severity";
 
 export function SeverityBadge({
   severity,
-  pulse = false,
   small = true,
   onImage = false,
   className = "",
@@ -25,22 +24,9 @@ export function SeverityBadge({
 
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border font-medium ${tone} ${small ? "px-2 py-[3px] text-[10.5px]" : "px-2.5 py-1 text-xs"} ${className}`}
+      className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border font-medium ${tone} ${small ? "px-2 py-[3px] text-[10.5px]" : "px-2.5 py-1 text-xs"} ${className}`}
     >
-      <span
-        className={`h-1.5 w-1.5 rounded-full ${SEVERITY_BG[severity]} ${pulse ? "animate-pulse" : ""}`}
-        aria-hidden
-      />
       {t(severity)}
     </span>
-  );
-}
-
-export function SeverityDot({ severity, className = "" }: { severity: Severity; className?: string }) {
-  return (
-    <span
-      className={`inline-block h-2 w-2 shrink-0 rounded-full ${SEVERITY_BG[severity]} ${className}`}
-      aria-hidden
-    />
   );
 }

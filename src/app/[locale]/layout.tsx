@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { AttackGlobe } from "@/components/background/AttackGlobe";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiveTicker } from "@/components/layout/LiveTicker";
@@ -83,6 +84,7 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
+        <AttackGlobe />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <LiveTicker />

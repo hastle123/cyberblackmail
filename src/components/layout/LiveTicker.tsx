@@ -5,7 +5,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/constants";
 import { decodeHtmlEntities } from "@/lib/article-text";
-import { SEVERITY_BG } from "@/lib/severity";
 import type { Severity } from "@prisma/client";
 
 type AlertItem = {
@@ -45,8 +44,7 @@ export function LiveTicker({ className }: { className?: string }) {
   return (
     <div className={cn("border-b border-line bg-surface/50", className)}>
       <div className="mx-auto flex h-10 max-w-7xl items-stretch px-4 lg:px-8">
-        <div className="flex shrink-0 items-center gap-2.5 pr-4">
-          <span className="live-dot" aria-hidden />
+        <div className="flex shrink-0 items-center pr-4">
           <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent-strong">
             {t("breaking")}
           </span>
@@ -57,9 +55,9 @@ export function LiveTicker({ className }: { className?: string }) {
           <div className="ticker-animate flex w-max items-center">
             {items.map((alert, i) => {
               const inner = (
-                <span className="inline-flex items-center gap-2.5 whitespace-nowrap pr-10 text-[13px] text-fg-2">
-                  <span className={cn("h-1.5 w-1.5 rounded-full", SEVERITY_BG[alert.severity])} aria-hidden />
+                <span className="inline-flex items-center gap-10 whitespace-nowrap pr-10 text-[13px] text-fg-2">
                   {text(alert)}
+                  <span className="h-3 w-px bg-line-strong" aria-hidden />
                 </span>
               );
               return alert.article?.slug ? (

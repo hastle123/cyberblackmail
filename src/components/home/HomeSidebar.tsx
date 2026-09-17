@@ -1,10 +1,9 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { SeverityDot } from "@/components/intel/SeverityBadge";
 import { editorial } from "@/lib/editorial";
 import { formatRelativeTime } from "@/lib/constants";
 import { localizeAlert, localizeArticleRef } from "@/lib/localize";
-import { SEVERITY_BG, SEVERITY_TEXT } from "@/lib/severity";
+import { SEVERITY_BG, SEVERITY_BORDER, SEVERITY_TEXT } from "@/lib/severity";
 import type { Severity } from "@prisma/client";
 
 type Alert = {
@@ -64,19 +63,14 @@ export async function HomeSidebar({
       {mapSlot}
 
       <Panel
-        title={
-          <>
-            <span className="live-dot" aria-hidden />
-            {tSidebar("urgent")}
-          </>
-        }
+        title={tSidebar("urgent")}
         action={
           <Link href="/alerts" className="text-xs font-medium text-fg-3 transition-colors hover:text-fg">
             {tSidebar("allAlerts")} →
           </Link>
         }
       >
-        <ul className="relative space-y-4 before:absolute before:bottom-2 before:left-[3.5px] before:top-2 before:w-px before:bg-line">
+        <ul className="space-y-4">
           {alerts.slice(0, 4).map((raw) => {
             const alert = localizeAlert(raw, locale);
             const body = (
@@ -90,11 +84,7 @@ export async function HomeSidebar({
               </>
             );
             return (
-              <li key={alert.id} className="group relative pl-5">
-                <SeverityDot
-                  severity={raw.severity}
-                  className="absolute left-0 top-1 ring-4 ring-surface"
-                />
+              <li key={alert.id} className={`group border-l-2 pl-3.5 ${SEVERITY_BORDER[raw.severity]}`}>
                 {raw.article?.slug ? <Link href={`/intel/${raw.article.slug}`}>{body}</Link> : body}
               </li>
             );

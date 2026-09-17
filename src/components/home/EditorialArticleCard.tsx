@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { SeverityBadge, SeverityDot } from "@/components/intel/SeverityBadge";
+import { SeverityBadge } from "@/components/intel/SeverityBadge";
 import { CoverImage } from "@/components/news/CoverImage";
 import { editorial } from "@/lib/editorial";
 import { formatRelativeTime } from "@/lib/constants";
@@ -99,7 +99,6 @@ export async function EditorialArticleRow({ article: raw }: { article: ArticleCa
         </div>
         <div className="min-w-0">
           <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-            <SeverityDot severity={raw.severity} />
             <span className={editorial.kicker}>{t(raw.category)}</span>
             <span className="text-fg-4" aria-hidden>•</span>
             <span className="text-fg-4">{raw.source}</span>
